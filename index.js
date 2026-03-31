@@ -139,9 +139,8 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-// ─── Start ──────────────────────────────────────────────────────
-app.listen(CONFIG.PORT, () => {
-  console.log(`\n✅  Server running → http://localhost:${CONFIG.PORT}`);
+app.listen(process.env.PORT || 3000, "0.0.0.0", () => {
+  console.log(`\n✅  Server running → http://localhost:${process.env.PORT || 3000}`);
   console.log(`🔗  Add this to Discord Dev Portal as Redirect URI:`);
-  console.log(`    ${CONFIG.REDIRECT_URI}\n`);
+  console.log(`    ${process.env.REDIRECT_URI}\n`);
 });
