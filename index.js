@@ -47,6 +47,7 @@ app.get("/auth/discord", (_req, res) => {
 
 // ─── OAuth Step 2: Discord redirects back here ─────────────────
 app.get("/callback", async (req, res) => {
+  console.log("Callback hit, code:", req.query.code ? "present" : "missing");
   const { code, error } = req.query;
 
   if (error || !code) {
@@ -66,17 +67,15 @@ app.get("/callback", async (req, res) => {
         redirect_uri:  CONFIG.REDIRECT_URI,
       }),
     });
-
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) {
       console.error("Token exchange failed:", tokenData);
       return res.redirect("/?auth=error");
     }
-
     const accessToken = tokenData.access_token;
 
     // Fetch basic user info
-    const userRes  = await fetch(`${DISCORD_API}/users/@me`, {
+    const userRes = await fetch(`${DISCORD_API}/users/@me`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const user = await userRes.json();
@@ -98,7 +97,6 @@ app.get("/callback", async (req, res) => {
       hasRole = member.roles?.includes(CONFIG.REQUIRED_ROLE);
       if (member.nick) username = member.nick;
     } else {
-      // User is not in the guild at all
       return res.redirect("/?auth=not_in_server");
     }
 
@@ -106,7 +104,6 @@ app.get("/callback", async (req, res) => {
       return res.redirect(`/?auth=no_role&user=${encodeURIComponent(username)}&avatar=${encodeURIComponent(avatar)}`);
     }
 
-    // Success — pass user info to the form page
     res.redirect(
       `/?auth=success&user=${encodeURIComponent(username)}&id=${encodeURIComponent(user.id)}&avatar=${encodeURIComponent(avatar)}`
     );
