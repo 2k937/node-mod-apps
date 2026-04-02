@@ -86,6 +86,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .search-box::placeholder{color:#252840}
 .filter-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;background:var(--sur3);border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:5px 11px;cursor:pointer;transition:all .2s}
 .filter-btn.active,.filter-btn:hover{border-color:var(--ac2);color:var(--ac2);background:rgba(88,101,242,.07)}
+.select-filter{background:var(--sur3);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;cursor:pointer;outline:none;transition:all .2s}
+.select-filter:focus{border-color:var(--ac2)}
+.select-filter option{background:var(--sur2)}
 .count-lbl{margin-left:auto;font-size:10px;color:var(--muted)}
 table{width:100%;border-collapse:collapse}
 th{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);background:var(--sur2)}
@@ -102,6 +105,7 @@ tr:hover td{background:rgba(88,101,242,.025)}
 .sp-a{background:rgba(87,242,135,.08);border:1px solid rgba(87,242,135,.2);color:var(--green)}
 .sp-d{background:rgba(237,66,69,.08);border:1px solid rgba(237,66,69,.2);color:var(--red)}
 .mtag{background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.2);border-radius:4px;padding:1px 6px;font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;color:var(--ac2);margin-left:4px}
+.apptag{background:rgba(114,137,218,.1);border:1px solid rgba(114,137,218,.2);border-radius:4px;padding:1px 6px;font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;color:var(--dim);margin-left:4px}
 .empty-st{text-align:center;padding:48px;color:var(--muted);font-size:12px;line-height:2}
 
 /* MODALS */
@@ -118,7 +122,7 @@ tr:hover td{background:rgba(88,101,242,.025)}
 .mfoot{display:flex;align-items:center;gap:8px;padding:14px 22px;border-top:1px solid var(--border);background:var(--sur2)}
 .mfoot-left{margin-right:auto;font-size:10px;color:var(--muted)}
 
-/* VIEW MODAL FIELDS */
+/* VIEW MODAL */
 .sec-title{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ac2);border-bottom:1px solid var(--border);padding-bottom:6px}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .df{display:flex;flex-direction:column;gap:4px}
@@ -129,7 +133,7 @@ tr:hover td{background:rgba(88,101,242,.025)}
 .review-note:focus{border-color:var(--accent)}
 .review-note::placeholder{color:#252840}
 
-/* ADD MODAL FORM */
+/* FORM FIELDS */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fgrp{display:flex;flex-direction:column;gap:5px}
 .fgrp.full{grid-column:1/-1}
@@ -142,7 +146,35 @@ tr:hover td{background:rgba(88,101,242,.025)}
 .fdiv{grid-column:1/-1;display:flex;align-items:center;gap:10px;color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
 .fdiv::before,.fdiv::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* APPLICATION TYPES PANEL */
+.app-types-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
+.app-type-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s}
+.app-type-card:hover{border-color:var(--ac2)}
+.app-type-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.atc-name{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:4px}
+.atc-desc{font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.atc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.atc-pill{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.2);border-radius:4px;padding:2px 8px;color:var(--ac2)}
+.atc-pill.open{background:rgba(87,242,135,.08);border-color:rgba(87,242,135,.2);color:var(--green)}
+.atc-pill.closed{background:rgba(237,66,69,.08);border-color:rgba(237,66,69,.2);color:var(--red)}
+.atc-actions{display:flex;gap:6px}
+.add-type-card{background:transparent;border:1px dashed var(--border2);border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;min-height:140px}
+.add-type-card:hover{border-color:var(--accent);background:rgba(88,101,242,.04)}
+.add-type-card-label{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--ac2)}
+.add-type-card-sub{font-size:10px;color:var(--muted)}
+
 /* QUESTION BUILDER */
+.qb-topbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 16px}
+.qb-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.qb-select{background:var(--sur2);border:1px solid var(--border2);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;transition:border-color .2s;flex:1;max-width:320px}
+.qb-select:focus{border-color:var(--accent)}
+.qb-select option{background:var(--sur2)}
+.qb-sep{width:1px;height:24px;background:var(--border2)}
+.qb-app-info{flex:1;display:flex;align-items:center;gap:8px}
+.qb-app-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.qb-app-desc{font-size:10px;color:var(--muted)}
+.qb-actions{display:flex;gap:8px;margin-left:auto}
+
 .q-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
 .q-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
 .q-card-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sur2);border-bottom:1px solid var(--border)}
@@ -164,6 +196,12 @@ tr:hover td{background:rgba(88,101,242,.025)}
 .save-status.saved{color:var(--green)}
 .save-status.unsaved{color:var(--yellow)}
 .locked-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(237,66,69,.05);border:1px solid rgba(237,66,69,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:#a07070;margin-bottom:16px;line-height:1.7}
+
+/* EMPTY STATE */
+.qb-empty{text-align:center;padding:60px 24px;color:var(--muted);background:var(--surface);border:1px solid var(--border2);border-radius:10px}
+.qb-empty-icon{font-size:32px;margin-bottom:12px;opacity:.3}
+.qb-empty-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--dim);margin-bottom:6px}
+.qb-empty-sub{font-size:11px;line-height:1.8}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--sur2);border:1px solid var(--border2);border-radius:10px;padding:11px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
@@ -203,6 +241,10 @@ tr:hover td{background:rgba(88,101,242,.025)}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
       Applications <span class="nc" id="pendingBadge">…</span>
     </div>
+    <div class="nav-item" onclick="nav('apptypes',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      Application Types
+    </div>
     <div class="nav-item" onclick="nav('questions',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       Question Builder
@@ -213,13 +255,12 @@ tr:hover td{background:rgba(88,101,242,.025)}
   <!-- MAIN -->
   <div class="main">
 
-    <!-- APPLICATIONS -->
+    <!-- APPLICATIONS PANEL -->
     <div class="panel active" id="panel-applications">
       <div class="page-head">
         <div><h2>Applications</h2><p>All submitted staff applications — live from MongoDB</p></div>
         <div class="head-acts">
           <button class="btn btn-ghost" onclick="loadApps()">↺ Refresh</button>
-          <button class="btn btn-primary" onclick="openAddModal()">+ Add Application</button>
         </div>
       </div>
       <div class="stat-grid">
@@ -231,6 +272,9 @@ tr:hover td{background:rgba(88,101,242,.025)}
       <div class="table-wrap">
         <div class="table-toolbar">
           <input class="search-box" id="searchBox" placeholder="Search name, ID…" oninput="renderTable()">
+          <select class="select-filter" id="typeFilter" onchange="renderTable()">
+            <option value="all">All Types</option>
+          </select>
           <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
           <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
           <button class="filter-btn" onclick="setFilter('approved',this)">Approved</button>
@@ -238,41 +282,52 @@ tr:hover td{background:rgba(88,101,242,.025)}
           <span class="count-lbl" id="cntLbl">Loading…</span>
         </div>
         <table>
-          <thead><tr><th>Applicant</th><th>App ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody id="appBody"><tr><td colspan="5" class="empty-st">Loading…</td></tr></tbody>
+          <thead><tr><th>Applicant</th><th>App ID</th><th>Type</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="appBody"><tr><td colspan="6" class="empty-st">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
 
-    <!-- QUESTION BUILDER -->
+    <!-- APPLICATION TYPES PANEL -->
+    <div class="panel" id="panel-apptypes">
+      <div class="page-head">
+        <div><h2>Application Types</h2><p>Create and manage different application forms — each gets its own question set</p></div>
+      </div>
+      <div class="app-types-grid" id="appTypesGrid">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- QUESTION BUILDER PANEL -->
     <div class="panel" id="panel-questions">
       <div class="page-head">
-        <div><h2>Question Builder</h2><p>Add, edit, or remove questions — changes replace the live public form immediately</p></div>
-        <div class="head-acts">
-          <button class="btn btn-yellow" onclick="resetQuestions()">↺ Reset to Defaults</button>
-          <button class="btn btn-primary" onclick="saveQuestions()">✓ Save & Publish</button>
+        <div><h2>Question Builder</h2><p>Select an application type and customize its questions</p></div>
+      </div>
+
+      <!-- Type selector bar -->
+      <div class="qb-topbar">
+        <span class="qb-label">Editing:</span>
+        <select class="qb-select" id="qbTypeSelect" onchange="onQbTypeChange()">
+          <option value="">— Select Application Type —</option>
+        </select>
+        <div class="qb-sep" id="qbSep" style="display:none"></div>
+        <div class="qb-app-info" id="qbAppInfo" style="display:none">
+          <div>
+            <div class="qb-app-name" id="qbAppName"></div>
+            <div class="qb-app-desc" id="qbAppDesc"></div>
+          </div>
+        </div>
+        <div class="qb-actions" id="qbActions" style="display:none">
+          <button class="btn btn-yellow btn-sm" onclick="resetQuestions()">↺ Reset to Defaults</button>
+          <button class="btn btn-primary btn-sm" onclick="saveQuestions()">✓ Save & Publish</button>
         </div>
       </div>
 
-      <div class="locked-notice">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><rect fill="rgba(237,66,69,.2)" x="4" y="11" width="16" height="10" rx="2.5"/><path stroke="#ed4245" stroke-width="1.8" d="M8 11V7a4 4 0 018 0v4"/></svg>
-        <div><strong style="color:var(--text)">Sections 1, 2 & 4 are locked</strong> — Profile info, experience/tools, background check and consent are permanent and always shown. Only Section 3 (Custom Questions) is editable here.</div>
-      </div>
-
-      <div class="save-status unsaved" id="qSaveStatus" style="margin-bottom:14px">Loading questions…</div>
-
-      <div id="qList" class="q-list"></div>
-
-      <button class="add-q-btn" onclick="addQuestion()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Question
-      </button>
-
-      <div class="save-bar">
-        <div class="save-status" id="saveBarStatus">Unsaved changes will replace the live form on save.</div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-yellow" onclick="resetQuestions()">↺ Reset</button>
-          <button class="btn btn-primary" onclick="saveQuestions()">✓ Save & Publish</button>
+      <div id="qBuilderBody">
+        <div class="qb-empty">
+          <div class="qb-empty-icon">📋</div>
+          <div class="qb-empty-title">No Application Type Selected</div>
+          <div class="qb-empty-sub">Choose an application type above to start editing its questions.<br>Create types first under the <strong>Application Types</strong> tab.</div>
         </div>
       </div>
     </div>
@@ -297,20 +352,58 @@ tr:hover td{background:rgba(88,101,242,.025)}
   </div>
 </div>
 
-<!-- ADD MODAL -->
-<div class="overlay" id="addOv" onclick="closeOv('addOv',event)">
-  <div class="modal modal-lg">
+<!-- ADD / EDIT APPLICATION TYPE MODAL -->
+<div class="overlay" id="typeOv" onclick="closeOv('typeOv',event)">
+  <div class="modal">
     <div class="mhead">
-      <div><div class="mtitle">Add Application Manually</div><div class="msub">Saved to MongoDB and tagged as Manual Entry</div></div>
-      <button class="mclose" onclick="closeOv('addOv')">✕</button>
+      <div><div class="mtitle" id="typeModalTitle">New Application Type</div><div class="msub">This will create a new form type with its own question set</div></div>
+      <button class="mclose" onclick="closeOv('typeOv')">✕</button>
     </div>
-    <div class="mbody" id="addBody">
-      <!-- Built dynamically from current questions -->
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp full">
+          <label>Application Type Name *</label>
+          <input id="t_name" placeholder="e.g. Staff Application, Event Team, Support Agent…">
+        </div>
+        <div class="fgrp full">
+          <label>Short Description</label>
+          <input id="t_desc" placeholder="e.g. Apply to join the moderation team">
+        </div>
+        <div class="fgrp">
+          <label>Status</label>
+          <select id="t_open">
+            <option value="open">Open — accepting submissions</option>
+            <option value="closed">Closed — not accepting</option>
+          </select>
+        </div>
+        <div class="fgrp">
+          <label>Icon / Emoji</label>
+          <input id="t_icon" placeholder="🛡️" maxlength="4">
+        </div>
+      </div>
     </div>
     <div class="mfoot">
       <div class="mfoot-left">Fields marked * are required</div>
-      <button class="btn btn-ghost" onclick="closeOv('addOv')">Cancel</button>
-      <button class="btn btn-primary" onclick="submitAdd()">+ Add Application</button>
+      <button class="btn btn-ghost" onclick="closeOv('typeOv')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitType()">Save Type</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE TYPE CONFIRM MODAL -->
+<div class="overlay" id="delTypeOv" onclick="closeOv('delTypeOv',event)">
+  <div class="modal">
+    <div class="mhead">
+      <div><div class="mtitle">Delete Application Type</div><div class="msub">This cannot be undone</div></div>
+      <button class="mclose" onclick="closeOv('delTypeOv')">✕</button>
+    </div>
+    <div class="mbody">
+      <p style="font-size:12px;color:var(--dim);line-height:1.8">Are you sure you want to delete the application type <strong id="delTypeName" style="color:var(--text)"></strong>? The questions saved for this type will also be removed. Existing applications of this type will not be deleted.</p>
+    </div>
+    <div class="mfoot">
+      <div class="mfoot-left"></div>
+      <button class="btn btn-ghost" onclick="closeOv('delTypeOv')">Cancel</button>
+      <button class="btn btn-red" onclick="confirmDelType()">✕ Delete Type</button>
     </div>
   </div>
 </div>
@@ -318,39 +411,400 @@ tr:hover td{background:rgba(88,101,242,.025)}
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ─────────────────────────────────────────────────────
-let allApps       = [];
-let currentFilter = 'all';
-let currentMongoId= null;
-let qData         = [];      // current question set in builder
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+let allApps        = [];
+let appTypes       = [];       // [{id, name, desc, open, icon}, …]
+let currentFilter  = 'all';
+let currentMongoId = null;
+let qData          = [];       // questions for currently selected type
+let selectedTypeId = null;     // which type is open in Question Builder
+let editingTypeId  = null;     // which type is open in the type modal (null = new)
+let pendingDelTypeId = null;
 
-// ── INIT ──────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
 (async () => {
   try {
     const me = await fetch('/api/me').then(r => r.json());
     document.getElementById('staffName').textContent = me.username || 'Admin';
     document.getElementById('staffAvatar').src       = me.avatar   || '';
   } catch {}
+  await loadAppTypes();
   loadApps();
-  loadQuestions();
 })();
 
-// ── NAV ───────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════════
 function nav(name, el) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(`panel-${name}`).classList.add('active');
   el.classList.add('active');
+  if (name === 'apptypes') renderAppTypesGrid();
+  if (name === 'questions') syncQbTypeDropdown();
 }
 
-// ── APPLICATIONS ──────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  APPLICATION TYPES
+// ══════════════════════════════════════════════════
+async function loadAppTypes() {
+  try {
+    appTypes = await fetch('/api/apptypes').then(r => r.json());
+  } catch {
+    appTypes = [];
+  }
+  renderAppTypesGrid();
+  syncTypeFilter();
+  syncQbTypeDropdown();
+}
+
+function renderAppTypesGrid() {
+  const grid = document.getElementById('appTypesGrid');
+  let html = '';
+  appTypes.forEach(t => {
+    const openCls  = t.open !== false ? 'open' : 'closed';
+    const openLbl  = t.open !== false ? 'Open' : 'Closed';
+    const icon     = t.icon || '📋';
+    html += `
+    <div class="app-type-card">
+      <div class="atc-name">${icon} ${esc(t.name)}</div>
+      <div class="atc-desc">${esc(t.desc || 'No description')}</div>
+      <div class="atc-meta">
+        <span class="atc-pill ${openCls}">${openLbl}</span>
+        <span class="atc-pill">${icon}</span>
+      </div>
+      <div class="atc-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openTypeModal('${t.id}')">✏ Edit</button>
+        <button class="btn btn-primary btn-sm" onclick="goToQBuilder('${t.id}')">📋 Questions</button>
+        <button class="btn btn-red btn-sm" onclick="openDelType('${t.id}')">✕</button>
+      </div>
+    </div>`;
+  });
+  html += `
+    <div class="add-type-card" onclick="openTypeModal(null)">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(88,101,242,.6)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <div class="add-type-card-label">New Application Type</div>
+      <div class="add-type-card-sub">Create a new form with its own questions</div>
+    </div>`;
+  grid.innerHTML = html;
+}
+
+function syncTypeFilter() {
+  const sel = document.getElementById('typeFilter');
+  const cur = sel.value;
+  sel.innerHTML = `<option value="all">All Types</option>`;
+  appTypes.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t.id; o.textContent = t.name;
+    sel.appendChild(o);
+  });
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+
+function syncQbTypeDropdown() {
+  const sel = document.getElementById('qbTypeSelect');
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— Select Application Type —</option>`;
+  appTypes.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t.id; o.textContent = `${t.icon || '📋'} ${t.name}`;
+    sel.appendChild(o);
+  });
+  if (selectedTypeId && [...sel.options].some(o => o.value === selectedTypeId)) {
+    sel.value = selectedTypeId;
+  }
+}
+
+// Open the "add/edit type" modal
+function openTypeModal(typeId) {
+  editingTypeId = typeId;
+  const t = typeId ? appTypes.find(x => x.id === typeId) : null;
+  document.getElementById('typeModalTitle').textContent = typeId ? 'Edit Application Type' : 'New Application Type';
+  document.getElementById('t_name').value = t?.name || '';
+  document.getElementById('t_desc').value = t?.desc || '';
+  document.getElementById('t_open').value = (t?.open !== false) ? 'open' : 'closed';
+  document.getElementById('t_icon').value = t?.icon || '';
+  document.getElementById('typeOv').classList.add('show');
+}
+
+async function submitType() {
+  const name = document.getElementById('t_name').value.trim();
+  if (!name) { toast('Name is required', 'ty'); return; }
+  const payload = {
+    name,
+    desc: document.getElementById('t_desc').value.trim(),
+    open: document.getElementById('t_open').value === 'open',
+    icon: document.getElementById('t_icon').value.trim() || '📋',
+  };
+  try {
+    if (editingTypeId) {
+      await fetch(`/api/apptypes/${editingTypeId}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const i = appTypes.findIndex(x => x.id === editingTypeId);
+      if (i !== -1) appTypes[i] = { ...appTypes[i], ...payload };
+      toast('✓ Application type updated', 'tg');
+    } else {
+      const res  = await fetch('/api/apptypes', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      appTypes.push({ id: data.id, ...payload });
+      toast('✓ Application type created', 'tg');
+    }
+    closeOv('typeOv');
+    renderAppTypesGrid();
+    syncTypeFilter();
+    syncQbTypeDropdown();
+  } catch { toast('Error saving type', 'tr'); }
+}
+
+function openDelType(typeId) {
+  pendingDelTypeId = typeId;
+  const t = appTypes.find(x => x.id === typeId);
+  document.getElementById('delTypeName').textContent = t?.name || typeId;
+  document.getElementById('delTypeOv').classList.add('show');
+}
+
+async function confirmDelType() {
+  if (!pendingDelTypeId) return;
+  try {
+    await fetch(`/api/apptypes/${pendingDelTypeId}`, { method: 'DELETE' });
+    appTypes = appTypes.filter(x => x.id !== pendingDelTypeId);
+    if (selectedTypeId === pendingDelTypeId) { selectedTypeId = null; renderQBuilderEmpty(); }
+    toast('Application type deleted', 'tr');
+    closeOv('delTypeOv');
+    renderAppTypesGrid();
+    syncTypeFilter();
+    syncQbTypeDropdown();
+  } catch { toast('Error deleting type', 'tr'); }
+  pendingDelTypeId = null;
+}
+
+// Navigate from type card directly to question builder
+function goToQBuilder(typeId) {
+  selectedTypeId = typeId;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-questions').classList.add('active');
+  document.querySelectorAll('.nav-item')[2].classList.add('active');
+  syncQbTypeDropdown();
+  loadQuestionsForType(typeId);
+}
+
+// ══════════════════════════════════════════════════
+//  QUESTION BUILDER
+// ══════════════════════════════════════════════════
+function onQbTypeChange() {
+  const sel = document.getElementById('qbTypeSelect');
+  selectedTypeId = sel.value || null;
+  if (!selectedTypeId) { renderQBuilderEmpty(); return; }
+  loadQuestionsForType(selectedTypeId);
+}
+
+function renderQBuilderEmpty() {
+  document.getElementById('qbSep').style.display    = 'none';
+  document.getElementById('qbAppInfo').style.display = 'none';
+  document.getElementById('qbActions').style.display = 'none';
+  document.getElementById('qBuilderBody').innerHTML  = `
+    <div class="qb-empty">
+      <div class="qb-empty-icon">📋</div>
+      <div class="qb-empty-title">No Application Type Selected</div>
+      <div class="qb-empty-sub">Choose an application type above to start editing its questions.<br>Create types first under the <strong>Application Types</strong> tab.</div>
+    </div>`;
+}
+
+async function loadQuestionsForType(typeId) {
+  const t = appTypes.find(x => x.id === typeId);
+  // Show info bar
+  document.getElementById('qbSep').style.display    = 'block';
+  document.getElementById('qbAppInfo').style.display = 'flex';
+  document.getElementById('qbActions').style.display = 'flex';
+  document.getElementById('qbAppName').textContent   = `${t?.icon || '📋'} ${t?.name || typeId}`;
+  document.getElementById('qbAppDesc').textContent   = t?.desc || '';
+  document.getElementById('qBuilderBody').innerHTML  = `<div style="color:var(--muted);font-size:11px;padding:20px">Loading questions…</div>`;
+
+  try {
+    qData = await fetch(`/api/questions/${typeId}`).then(r => r.json());
+  } catch {
+    qData = [];
+  }
+  renderQBuilder();
+}
+
+function renderQBuilder() {
+  const body = document.getElementById('qBuilderBody');
+  let html = '';
+
+  // Locked notice
+  html += `<div class="locked-notice">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><rect fill="rgba(237,66,69,.2)" x="4" y="11" width="16" height="10" rx="2.5"/><path stroke="#ed4245" stroke-width="1.8" d="M8 11V7a4 4 0 018 0v4"/></svg>
+    <div><strong style="color:var(--text)">Sections 1, 2 & 4 are locked</strong> — Profile info, experience/tools, background check and consent are permanent and always shown on the public form. Only Section 3 (Custom Questions) is editable here.</div>
+  </div>`;
+
+  // Save status
+  html += `<div class="save-status unsaved" id="qSaveStatus" style="margin-bottom:14px">${qData.length} questions loaded</div>`;
+
+  // Question list placeholder
+  html += `<div id="qList" class="q-list"></div>`;
+
+  // Add button
+  html += `<button class="add-q-btn" onclick="addQuestion()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add Question
+  </button>`;
+
+  // Save bar
+  html += `<div class="save-bar">
+    <div class="save-status" id="saveBarStatus">Unsaved changes will replace the live form on save.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-yellow" onclick="resetQuestions()">↺ Reset</button>
+      <button class="btn btn-primary" onclick="saveQuestions()">✓ Save & Publish</button>
+    </div>
+  </div>`;
+
+  body.innerHTML = html;
+  renderQList();
+}
+
+function renderQList() {
+  const list = document.getElementById('qList');
+  if (!list) return;
+  if (!qData.length) {
+    list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:12px">No questions yet — click "Add Question" to start building.</div>`;
+    return;
+  }
+  list.innerHTML = qData.map((q, i) => `
+    <div class="q-card" id="qc_${i}">
+      <div class="q-card-head">
+        <div class="q-num">${i + 1}</div>
+        <div class="q-lbl">${esc(q.label || 'Untitled Question')}</div>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          ${i > 0 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},-1)">↑</button>` : ''}
+          ${i < qData.length-1 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},1)">↓</button>` : ''}
+          <button class="btn btn-red btn-sm" onclick="removeQ(${i})">✕</button>
+        </div>
+      </div>
+      <div class="q-card-body">
+        <div class="q-row">
+          <div class="q-field">
+            <label>Question Label *</label>
+            <input type="text" value="${esc(q.label||'')}" onchange="qData[${i}].label=this.value;markUnsaved()" placeholder="e.g. Scenario A — …">
+          </div>
+          <div class="q-field">
+            <label>Type</label>
+            <select onchange="qData[${i}].type=this.value;markUnsaved();renderQList()">
+              <option value="textarea" ${q.type==='textarea'?'selected':''}>Text Area</option>
+              <option value="scenario" ${q.type==='scenario'?'selected':''}>Scenario (with description)</option>
+            </select>
+          </div>
+        </div>
+        ${q.type === 'scenario' ? `
+        <div class="q-field">
+          <label>Scenario Description (shown to applicant)</label>
+          <textarea onchange="qData[${i}].body=this.value;markUnsaved()" placeholder="Describe the scenario…">${esc(q.body||'')}</textarea>
+        </div>` : `
+        <div class="q-field">
+          <label>Placeholder Text</label>
+          <input type="text" value="${esc(q.placeholder||'')}" onchange="qData[${i}].placeholder=this.value;markUnsaved()" placeholder="Hint shown in the text box…">
+        </div>`}
+        <div class="q-row">
+          <div class="q-field">
+            <label>Max Characters</label>
+            <input type="number" value="${q.maxLen||500}" min="100" max="1000" onchange="qData[${i}].maxLen=parseInt(this.value);markUnsaved()">
+          </div>
+          <div class="q-field">
+            <label>Required?</label>
+            <select onchange="qData[${i}].required=this.value==='true';markUnsaved()">
+              <option value="true"  ${q.required!==false?'selected':''}>Yes — required</option>
+              <option value="false" ${q.required===false?'selected':''}>No — optional</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addQuestion() {
+  qData.push({ id: 'q_' + Date.now(), label: '', type: 'textarea', required: true, maxLen: 500, placeholder: '', body: '' });
+  renderQList();
+  markUnsaved();
+  const list = document.getElementById('qList');
+  list?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function removeQ(i) {
+  if (!confirm('Remove this question?')) return;
+  qData.splice(i, 1);
+  renderQList();
+  markUnsaved();
+}
+
+function moveQ(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= qData.length) return;
+  [qData[i], qData[j]] = [qData[j], qData[i]];
+  renderQList();
+  markUnsaved();
+}
+
+function markUnsaved() {
+  const s = document.getElementById('qSaveStatus');
+  const b = document.getElementById('saveBarStatus');
+  if (s) { s.textContent = '● Unsaved changes'; s.className = 'save-status unsaved'; }
+  if (b) b.textContent = '● Unsaved — click Save & Publish to apply changes to the live form.';
+}
+
+async function saveQuestions() {
+  if (!selectedTypeId) { toast('No application type selected', 'ty'); return; }
+  for (const q of qData) {
+    if (!q.label?.trim()) { toast('All questions need a label', 'ty'); return; }
+    if (!q.id) q.id = 'q_' + Date.now();
+  }
+  try {
+    await fetch(`/api/questions/${selectedTypeId}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(qData),
+    });
+    const s = document.getElementById('qSaveStatus');
+    const b = document.getElementById('saveBarStatus');
+    if (s) { s.textContent = '✓ Saved & published to live form'; s.className = 'save-status saved'; }
+    if (b) b.textContent = 'Questions saved. The public form will now use these questions for this application type.';
+    toast('✓ Questions published to live form', 'tg');
+  } catch { toast('Error saving questions', 'tr'); }
+}
+
+async function resetQuestions() {
+  if (!selectedTypeId) return;
+  if (!confirm('Reset all questions to the defaults? This will overwrite your current questions.')) return;
+  try {
+    const res  = await fetch(`/api/questions/${selectedTypeId}/reset`, { method: 'POST' });
+    const data = await res.json();
+    qData = data.questions;
+    renderQList();
+    const s = document.getElementById('qSaveStatus');
+    if (s) { s.textContent = '✓ Reset to defaults'; s.className = 'save-status saved'; }
+    toast('Questions reset to defaults', 'ty');
+  } catch { toast('Error resetting', 'tr'); }
+}
+
+// ══════════════════════════════════════════════════
+//  APPLICATIONS
+// ══════════════════════════════════════════════════
 async function loadApps() {
   try {
     allApps = await fetch('/api/applications').then(r => r.json());
     updateStats();
     renderTable();
   } catch {
-    document.getElementById('appBody').innerHTML = `<tr><td colspan="5" class="empty-st">Failed to load — check server.</td></tr>`;
+    document.getElementById('appBody').innerHTML = `<tr><td colspan="6" class="empty-st">Failed to load — check server.</td></tr>`;
   }
 }
 
@@ -374,15 +828,17 @@ function setFilter(f, el) {
 }
 
 function renderTable() {
-  const q = document.getElementById('searchBox').value.toLowerCase();
+  const q       = document.getElementById('searchBox').value.toLowerCase();
+  const typeF   = document.getElementById('typeFilter').value;
   let list = allApps;
   if (currentFilter !== 'all') list = list.filter(a => (a._status || 'pending') === currentFilter);
-  if (q) list = list.filter(a => (a._displayName||'').toLowerCase().includes(q) || (a._appId||'').toLowerCase().includes(q) || (a._submittedBy||'').toLowerCase().includes(q));
+  if (typeF !== 'all')         list = list.filter(a => a._appTypeId === typeF);
+  if (q)                       list = list.filter(a => (a._displayName||'').toLowerCase().includes(q) || (a._appId||'').toLowerCase().includes(q) || (a._submittedBy||'').toLowerCase().includes(q));
 
   document.getElementById('cntLbl').textContent = `${list.length} application${list.length!==1?'s':''}`;
 
   if (!list.length) {
-    document.getElementById('appBody').innerHTML = `<tr><td colspan="5" class="empty-st">No applications found.</td></tr>`;
+    document.getElementById('appBody').innerHTML = `<tr><td colspan="6" class="empty-st">No applications found.</td></tr>`;
     return;
   }
 
@@ -394,11 +850,14 @@ function renderTable() {
     const sc     = status === 'approved' ? 'sp-a' : status === 'denied' ? 'sp-d' : 'sp-p';
     const st     = status === 'approved' ? '✓ Approved' : status === 'denied' ? '✕ Denied' : '⏳ Pending';
     const mid    = typeof app._id === 'object' ? app._id.$oid : app._id;
-    const mtag   = app._manual ? '<span class="mtag">Manual</span>' : '';
+    // Resolve app type name
+    const typeObj = appTypes.find(x => x.id === app._appTypeId);
+    const typeLbl = typeObj ? `${typeObj.icon || ''} ${typeObj.name}` : (app._appTypeName || '—');
 
     return `<tr>
-      <td><div class="ucell"><img class="uav" src="${app._avatar||''}" onerror="this.src=''"><div><div class="uname">${esc(name)}${mtag}</div><div class="uid">${esc(app._submittedBy||'—')}</div></div></div></td>
+      <td><div class="ucell"><img class="uav" src="${app._avatar||''}" onerror="this.src=''"><div><div class="uname">${esc(name)}</div><div class="uid">${esc(app._submittedBy||'—')}</div></div></div></td>
       <td class="appid-cell">${esc(appId)}</td>
+      <td style="font-size:10px;color:var(--dim)">${esc(typeLbl)}</td>
       <td style="font-size:10px;color:var(--muted)">${date}</td>
       <td><span class="sp ${sc}">${st}</span></td>
       <td><div style="display:flex;gap:6px">
@@ -445,12 +904,10 @@ function openView(mid) {
       body.appendChild(sec);
     });
   } else {
-    // Manual entry
     const g = document.createElement('div'); g.className = 'fg2';
     const fields = [
       ['Username', app._displayName], ['User ID', app._submittedBy],
       ['Age', app.age], ['Timezone', app.timezone], ['Availability', app.availability],
-      ['Motivation', app.motivation], ['Server Invites', app.serverInvites],
       ...Object.entries(app).filter(([k]) => k.startsWith('answer_')).map(([k,v]) => [k.replace('answer_','Q: '), v]),
       ['Ever Banned?', app.banned], ['Has Alts?', app.alts],
       ['Ban Explanation', app.banExplain], ['Extra Info', app.extra],
@@ -490,281 +947,9 @@ async function delApp(mid) {
   } catch { toast('Error deleting', 'tr'); }
 }
 
-// ── ADD MODAL ─────────────────────────────────────────────────
-function openAddModal() {
-  // Build form from current questions
-  const body = document.getElementById('addBody');
-  body.innerHTML = '';
-
-  // Profile (fixed)
-  const profileHtml = `
-    <div class="fg">
-      <div class="fdiv">Profile</div>
-      <div class="fgrp"><label>Discord Username *</label><input id="a_username" placeholder="username"></div>
-      <div class="fgrp"><label>Discord User ID</label><input id="a_userid" placeholder="000000000000000000"></div>
-      <div class="fgrp"><label>Age *</label><input id="a_age" type="number" placeholder="16" min="14"></div>
-      <div class="fgrp"><label>Timezone *</label>
-        <select id="a_tz"><option value="">— Select —</option>
-          <option>UTC-8 (PST)</option><option>UTC-7 (MST)</option><option>UTC-6 (CST)</option>
-          <option>UTC-5 (EST)</option><option>UTC+0 (GMT)</option><option>UTC+1 (CET)</option>
-          <option>UTC+2 (EET)</option><option>UTC+3 (MSK)</option><option>UTC+5:30 (IST)</option>
-          <option>UTC+8 (SGT)</option><option>UTC+9 (JST)</option><option>UTC+10 (AEST)</option>
-        </select>
-      </div>
-      <div class="fgrp"><label>Availability *</label>
-        <select id="a_avail"><option value="">— Select —</option>
-          <option>Less than 1 hour/day</option><option>1–3 hours/day</option>
-          <option>3–6 hours/day</option><option>6+ hours/day</option>
-        </select>
-      </div>
-      <div class="fdiv">Experience</div>
-      <div class="fgrp"><label>Prior Mod Experience?</label>
-        <select id="a_modexp"><option value="no">No</option><option value="yes">Yes</option></select>
-      </div>
-    </div>`;
-
-  const div0 = document.createElement('div');
-  div0.innerHTML = profileHtml;
-  body.appendChild(div0);
-
-  // Dynamic questions
-  if (qData.length) {
-    const divQ = document.createElement('div');
-    divQ.style.cssText = 'display:flex;flex-direction:column;gap:10px';
-    const header = document.createElement('div');
-    header.style.cssText = 'font-family:Rajdhani,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px';
-    header.innerHTML = `<span>Custom Questions</span><span style="flex:1;height:1px;background:var(--border);display:block"></span>`;
-    divQ.appendChild(header);
-    qData.forEach(q => {
-      const f = document.createElement('div');
-      f.className = 'fgrp full';
-      f.style.cssText = 'display:flex;flex-direction:column;gap:5px';
-      const reqStar = q.required ? ' *' : '';
-      if (q.type === 'scenario') {
-        f.innerHTML = `<label>${esc(q.label)}${reqStar}</label><div style="font-size:10px;color:var(--dim);margin-bottom:2px;font-style:italic">${esc(q.body||'')}</div><textarea id="a_q_${q.id}" placeholder="Their response…"></textarea>`;
-      } else {
-        f.innerHTML = `<label>${esc(q.label)}${reqStar}</label><textarea id="a_q_${q.id}" placeholder="${esc(q.placeholder||'')}"></textarea>`;
-      }
-      divQ.appendChild(f);
-    });
-    body.appendChild(divQ);
-  }
-
-  // Background (fixed)
-  const bgDiv = document.createElement('div');
-  bgDiv.innerHTML = `
-    <div class="fg" style="margin-top:10px">
-      <div class="fdiv">Background</div>
-      <div class="fgrp"><label>Ever Been Banned?</label><select id="a_banned"><option value="no">No</option><option value="yes">Yes</option></select></div>
-      <div class="fgrp"><label>Has Alt Accounts?</label><select id="a_alts"><option value="no">No</option><option value="yes">Yes</option></select></div>
-      <div class="fgrp full"><label>Ban Explanation</label><textarea id="a_banex" placeholder="N/A or explanation…"></textarea></div>
-      <div class="fgrp full"><label>Extra Info</label><textarea id="a_extra" placeholder="Anything else…"></textarea></div>
-      <div class="fdiv">Review</div>
-      <div class="fgrp"><label>Initial Status</label><select id="a_status"><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option></select></div>
-      <div class="fgrp"><label>Review Note</label><input id="a_note" placeholder="Optional…"></div>
-    </div>`;
-  body.appendChild(bgDiv);
-
-  document.getElementById('addOv').classList.add('show');
-}
-
-async function submitAdd() {
-  const g = id => document.getElementById(id)?.value.trim() || '';
-  const username = g('a_username');
-  const age      = g('a_age');
-  const tz       = g('a_tz');
-  const avail    = g('a_avail');
-
-  if (!username || !age || !tz || !avail) { toast('Fill required fields', 'ty'); return; }
-
-  const answers = {};
-  qData.forEach(q => {
-    const val = g(`a_q_${q.id}`);
-    if (val) answers[`answer_${q.id}`] = val;
-  });
-
-  // Also build a webhook-style embed for consistency
-  const qFields = qData.map(q => ({
-    name:  q.label.substring(0, 256),
-    value: (g(`a_q_${q.id}`) || 'Not provided').substring(0, 1024),
-  }));
-
-  const appId = 'NODE-' + Math.random().toString(36).slice(2,11).toUpperCase();
-  const webhookPayload = {
-    username: 'Node — Staff Applications',
-    avatar_url: 'https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128',
-    content: `📋 **MANUAL APPLICATION — NODE**\n> ID: \`${appId}\`  •  Added by admin`,
-    embeds: [
-      { title: '👤 PROFILE', color: 0xffffff, fields: [
-        { name: 'Username',     value: username, inline: true },
-        { name: 'Age',          value: age,      inline: true },
-        { name: 'Timezone',     value: tz,       inline: true },
-        { name: 'Availability', value: avail,    inline: true },
-      ]},
-      ...(qFields.length ? [{ title: '⚡ CUSTOM QUESTIONS', color: 0x888888, fields: qFields }] : []),
-      { title: '🔍 BACKGROUND', color: 0x333333, fields: [
-        { name: 'Banned?', value: g('a_banned') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
-        { name: 'Alts?',   value: g('a_alts')   === 'yes' ? '✅ YES' : '❌ NO', inline: true },
-        { name: 'Ban Explanation', value: g('a_banex') || 'N/A' },
-      ], footer: { text: `Application ID: ${appId}  •  Manual Entry` }, timestamp: new Date().toISOString() },
-    ],
-  };
-
-  const payload = {
-    _displayName: username,
-    _submittedBy: g('a_userid') || 'manual',
-    age, timezone: tz, availability: avail,
-    modExp: g('a_modexp'),
-    ...answers,
-    banned: g('a_banned'), alts: g('a_alts'),
-    banExplain: g('a_banex'), extra: g('a_extra'),
-    _status:     g('a_status') || 'pending',
-    _reviewNote: g('a_note'),
-    embeds:      webhookPayload.embeds,
-    content:     webhookPayload.content,
-    _appId:      appId,
-  };
-
-  try {
-    const res  = await fetch('/api/applications', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    const data = await res.json();
-    if (!data.ok) throw new Error();
-    closeOv('addOv');
-    toast(`✓ Added — ${data.appId}`, 'tg');
-    await loadApps();
-  } catch { toast('Error adding application', 'tr'); }
-}
-
-// ── QUESTION BUILDER ──────────────────────────────────────────
-async function loadQuestions() {
-  try {
-    qData = await fetch('/api/questions').then(r => r.json());
-    renderQBuilder();
-    document.getElementById('qSaveStatus').textContent   = `${qData.length} questions loaded`;
-    document.getElementById('qSaveStatus').className     = 'save-status saved';
-    document.getElementById('saveBarStatus').textContent = 'Questions loaded from database.';
-  } catch {
-    document.getElementById('qSaveStatus').textContent = 'Failed to load questions';
-  }
-}
-
-function renderQBuilder() {
-  const list = document.getElementById('qList');
-  if (!qData.length) {
-    list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:12px">No questions yet — click "Add Question" to start building.</div>`;
-    return;
-  }
-  list.innerHTML = qData.map((q, i) => `
-    <div class="q-card" id="qc_${i}">
-      <div class="q-card-head">
-        <div class="q-num">${i + 1}</div>
-        <div class="q-lbl">${esc(q.label || 'Untitled Question')}</div>
-        <div style="display:flex;gap:6px;margin-left:auto">
-          ${i > 0 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},-1)">↑</button>` : ''}
-          ${i < qData.length-1 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},1)">↓</button>` : ''}
-          <button class="btn btn-red btn-sm" onclick="removeQ(${i})">✕</button>
-        </div>
-      </div>
-      <div class="q-card-body">
-        <div class="q-row">
-          <div class="q-field">
-            <label>Question Label *</label>
-            <input type="text" value="${esc(q.label||'')}" onchange="qData[${i}].label=this.value;markUnsaved()" placeholder="e.g. Scenario A — …">
-          </div>
-          <div class="q-field">
-            <label>Type</label>
-            <select onchange="qData[${i}].type=this.value;markUnsaved();renderQBuilder()">
-              <option value="textarea" ${q.type==='textarea'?'selected':''}>Text Area</option>
-              <option value="scenario" ${q.type==='scenario'?'selected':''}>Scenario (with description)</option>
-            </select>
-          </div>
-        </div>
-        ${q.type === 'scenario' ? `
-        <div class="q-field">
-          <label>Scenario Description (shown to applicant)</label>
-          <textarea onchange="qData[${i}].body=this.value;markUnsaved()" placeholder="Describe the scenario…">${esc(q.body||'')}</textarea>
-        </div>` : `
-        <div class="q-field">
-          <label>Placeholder Text</label>
-          <input type="text" value="${esc(q.placeholder||'')}" onchange="qData[${i}].placeholder=this.value;markUnsaved()" placeholder="Hint shown in the text box…">
-        </div>`}
-        <div class="q-row">
-          <div class="q-field">
-            <label>Max Characters</label>
-            <input type="number" value="${q.maxLen||500}" min="100" max="1000" onchange="qData[${i}].maxLen=parseInt(this.value);markUnsaved()">
-          </div>
-          <div class="q-field">
-            <label>Required?</label>
-            <select onchange="qData[${i}].required=this.value==='true';markUnsaved()">
-              <option value="true"  ${q.required!==false?'selected':''}>Yes — required</option>
-              <option value="false" ${q.required===false?'selected':''}>No — optional</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function addQuestion() {
-  qData.push({ id: 'q_' + Date.now(), label: '', type: 'textarea', required: true, maxLen: 500, placeholder: '', body: '' });
-  renderQBuilder();
-  markUnsaved();
-  // Scroll to bottom
-  const list = document.getElementById('qList');
-  list.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
-}
-
-function removeQ(i) {
-  if (!confirm('Remove this question?')) return;
-  qData.splice(i, 1);
-  renderQBuilder();
-  markUnsaved();
-}
-
-function moveQ(i, dir) {
-  const j = i + dir;
-  if (j < 0 || j >= qData.length) return;
-  [qData[i], qData[j]] = [qData[j], qData[i]];
-  renderQBuilder();
-  markUnsaved();
-}
-
-function markUnsaved() {
-  document.getElementById('qSaveStatus').textContent = '● Unsaved changes';
-  document.getElementById('qSaveStatus').className   = 'save-status unsaved';
-  document.getElementById('saveBarStatus').textContent = '● Unsaved — click Save & Publish to apply changes to the live form.';
-}
-
-async function saveQuestions() {
-  // Validate
-  for (const q of qData) {
-    if (!q.label?.trim()) { toast('All questions need a label', 'ty'); return; }
-    if (!q.id) q.id = 'q_' + Date.now();
-  }
-  try {
-    await fetch('/api/questions', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(qData) });
-    document.getElementById('qSaveStatus').textContent = '✓ Saved & published to live form';
-    document.getElementById('qSaveStatus').className   = 'save-status saved';
-    document.getElementById('saveBarStatus').textContent = 'Questions saved. The public form will now use these questions.';
-    toast('✓ Questions published to live form', 'tg');
-  } catch { toast('Error saving questions', 'tr'); }
-}
-
-async function resetQuestions() {
-  if (!confirm('Reset all questions to the defaults? This will overwrite your current questions.')) return;
-  try {
-    const res = await fetch('/api/questions/reset', { method: 'POST' });
-    const data = await res.json();
-    qData = data.questions;
-    renderQBuilder();
-    document.getElementById('qSaveStatus').textContent = '✓ Reset to defaults';
-    document.getElementById('qSaveStatus').className   = 'save-status saved';
-    toast('Questions reset to defaults', 'ty');
-  } catch { toast('Error resetting', 'tr'); }
-}
-
-// ── HELPERS ───────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════
 function closeOv(id, e) {
   if (e && e.target !== document.getElementById(id)) return;
   document.getElementById(id).classList.remove('show');
