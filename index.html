@@ -26,6 +26,28 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .btn-discord{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#5865F2;color:#fff;border:none;border-radius:10px;padding:14px 28px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(88,101,242,.35)}
 .btn-discord:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 8px 32px rgba(88,101,242,.45)}
 
+/* TYPE SELECTOR SCREEN */
+.type-select-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:0;max-width:520px;width:100%;position:relative;z-index:1;animation:fadeUp .5s ease both;box-shadow:0 32px 64px rgba(0,0,0,.6);overflow:hidden}
+.ts-head{padding:36px 36px 28px;text-align:center;border-bottom:1px solid var(--border)}
+.ts-logo{width:56px;height:56px;border-radius:12px;overflow:hidden;margin:0 auto 20px;border:1px solid var(--border2)}
+.ts-logo img{width:100%;height:100%;object-fit:cover}
+.ts-title{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
+.ts-sub{font-size:11px;color:var(--dim);line-height:1.7}
+.ts-body{padding:24px 36px 32px;display:flex;flex-direction:column;gap:10px}
+.ts-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.type-option{display:flex;align-items:center;gap:14px;background:var(--sur2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s;text-decoration:none}
+.type-option:hover{border-color:#555;background:var(--sur3)}
+.type-option.selected{border-color:#fff;background:rgba(255,255,255,.03)}
+.to-icon{width:40px;height:40px;border-radius:9px;background:var(--sur3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.to-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.to-desc{font-size:10px;color:var(--muted);margin-top:2px}
+.to-arrow{margin-left:auto;color:var(--muted);font-size:16px;transition:transform .2s}
+.type-option:hover .to-arrow{transform:translateX(3px);color:var(--dim)}
+.ts-foot{padding:0 36px 24px}
+.ts-note{font-size:10px;color:var(--muted);text-align:center;line-height:1.6}
+.ts-closed{opacity:.4;cursor:not-allowed;pointer-events:none}
+.ts-closed-pill{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;background:rgba(237,66,69,.1);border:1px solid rgba(237,66,69,.2);border-radius:4px;padding:2px 7px;color:#ed4245;margin-left:auto}
+
 /* DENIED / WARN CARDS */
 .denied-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;max-width:480px;width:100%;overflow:hidden;position:relative;z-index:1;animation:fadeUp .5s ease both;box-shadow:0 32px 64px rgba(0,0,0,.6)}
 .denied-top{background:var(--sur2);border-bottom:1px solid var(--border);padding:36px 36px 28px;text-align:center}
@@ -72,6 +94,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .badge-pulse{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1.8s ease infinite}
 h1{font-family:'Rajdhani',sans-serif;font-size:clamp(30px,6vw,50px);font-weight:700;letter-spacing:-1px;line-height:1.1;color:#fff;margin-bottom:14px}
 .subtitle{color:var(--dim);font-size:12px;line-height:1.8;max-width:500px;margin:0 auto}
+
+/* APPLIED TYPE BANNER */
+.app-type-banner{display:inline-flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--border2);border-radius:8px;padding:8px 16px;margin-bottom:24px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--dim)}
+.app-type-banner span{color:#fff}
+.app-type-banner a{color:var(--muted);font-size:11px;margin-left:8px;text-decoration:underline;cursor:pointer}
+.app-type-banner a:hover{color:var(--dim)}
+
 .warn-banner{display:flex;gap:14px;background:var(--sur2);border:1px solid var(--border2);border-left:2px solid #fff;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:36px;align-items:flex-start;animation:fadeUp .5s .2s ease both}
 .warn-banner p{font-size:11px;color:var(--dim);line-height:1.8}
 .warn-banner strong{color:var(--text)}
@@ -129,7 +158,7 @@ input[readonly]{opacity:.5;cursor:not-allowed}
 .divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-family:'Rajdhani',sans-serif;font-weight:600}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* BACKGROUND SECTION */
+/* BACKGROUND */
 .bg-banner{background:var(--sur2);border:1px solid var(--border2);border-radius:12px;padding:20px;display:flex;gap:16px;align-items:flex-start}
 .bg-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;color:#fff;display:flex;align-items:center;gap:8px}
 .bg-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
@@ -194,6 +223,24 @@ input.error,select.error,textarea.error{border-color:var(--dim)!important;box-sh
     <p class="auth-sub">This application is restricted to verified server members. Sign in with Discord to verify your eligibility before proceeding.</p>
     <a href="/auth/discord" class="btn-discord"><svg class="ico" width="20" height="20"><use href="#ic-discord"/></svg>Continue with Discord</a>
     <p class="auth-note">We only request your identity and guild membership — not your messages, friends list, or any other data.</p>
+  </div>
+</div>
+
+<!-- APPLICATION TYPE SELECTOR (shown when 2+ open types) -->
+<div id="screenTypeSelect" class="screen">
+  <div class="type-select-card">
+    <div class="ts-head">
+      <div class="ts-logo"><img src="https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=64" alt="Node"></div>
+      <div class="ts-title">What are you applying for?</div>
+      <p class="ts-sub">Choose an application type to continue. Each has different requirements and questions.</p>
+    </div>
+    <div class="ts-body">
+      <div class="ts-label">Available Applications</div>
+      <div id="typeOptionsList"><!-- built by JS --></div>
+    </div>
+    <div class="ts-foot">
+      <p class="ts-note">Signed in as <strong id="tsPillName" style="color:var(--dim)"></strong> &nbsp;·&nbsp; <a href="/auth/discord" style="color:var(--muted);font-size:10px">Switch account</a></p>
+    </div>
   </div>
 </div>
 
@@ -270,7 +317,12 @@ input.error,select.error,textarea.error{border-color:var(--dim)!important;box-sh
       <span class="server-name">Node</span>
     </div>
     <div class="badge"><span class="badge-pulse"></span><svg class="ico" width="14" height="14"><use href="#ic-shield"/></svg>Staff Recruitment</div>
-    <h1>Staff Application</h1>
+    <h1 id="formTitle">Staff Application</h1>
+    <!-- App type banner shown if user selected a type -->
+    <div id="appTypeBanner" style="display:none" class="app-type-banner">
+      <span id="appTypeBannerIcon"></span> Applying for: <span id="appTypeBannerName"></span>
+      <a onclick="backToTypeSelect()">Change</a>
+    </div>
     <p class="subtitle">Applications are reviewed by senior staff within 3–7 days. All submissions are confidential and subject to a background review by our HR team.</p>
   </div>
 
@@ -279,7 +331,6 @@ input.error,select.error,textarea.error{border-color:var(--dim)!important;box-sh
     <p><strong>Important:</strong> Submitting false information — including fake experience or misrepresented bans — will result in a <strong>permanent ban</strong> from the server and all affiliated communities. Be honest.</p>
   </div>
 
-  <!-- Progress bar built by JS -->
   <div class="progress-bar" id="progressBar"></div>
 
   <div class="form-card">
@@ -289,10 +340,8 @@ input.error,select.error,textarea.error{border-color:var(--dim)!important;box-sh
       <div class="step-pill" id="stepPill"></div>
     </div>
 
-    <!-- Sections built by JS -->
     <div id="formSections"></div>
 
-    <!-- SUCCESS -->
     <div id="success">
       <div class="success-ring">✓</div>
       <div class="success-title">Application Submitted</div>
@@ -310,11 +359,21 @@ input.error,select.error,textarea.error{border-color:var(--dim)!important;box-sh
 </div>
 
 <script>
-// ── INIT ──────────────────────────────────────────────────────
-let sessionUser = null;
-let sessionId   = null;
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+let sessionUser   = null;
+let sessionId     = null;
+let sessionAvatar = null;
+let allAppTypes   = [];
+let selectedType  = null;   // the chosen apptype object
+let questions     = [];
+let cur           = 0;
 
-(function(){
+// ══════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════
+(async function() {
   const p    = new URLSearchParams(location.search);
   const auth = p.get('auth');
   const user = p.get('user');
@@ -322,19 +381,37 @@ let sessionId   = null;
   const av   = p.get('avatar');
   history.replaceState({}, '', location.pathname);
 
-  const hide = () => document.getElementById('screenAuth').classList.remove('show');
+  const hideAuth = () => document.getElementById('screenAuth').classList.remove('show');
 
   if (auth === 'success') {
-    hide();
-    sessionUser = user || 'Member';
-    sessionId   = uid  || '';
-    document.getElementById('mainApp').classList.add('show');
+    hideAuth();
+    sessionUser   = user || 'Member';
+    sessionId     = uid  || '';
+    sessionAvatar = av   || '';
+
     document.getElementById('userPill').classList.add('show');
-    document.getElementById('pillName').textContent = sessionUser;
-    document.getElementById('pillAvatar').src       = av || '';
-    buildForm();
+    document.getElementById('pillName').textContent  = sessionUser;
+    document.getElementById('pillAvatar').src        = sessionAvatar;
+
+    // Load application types
+    try { allAppTypes = await fetch('/api/apptypes').then(r => r.json()); } catch { allAppTypes = []; }
+    const openTypes = allAppTypes.filter(t => t.open !== false);
+
+    if (openTypes.length === 0) {
+      // No open types — just go straight to the default form (backwards compat)
+      await startForm(null);
+    } else if (openTypes.length === 1) {
+      // Only one open type — auto-select it
+      await startForm(openTypes[0]);
+    } else {
+      // Multiple open types — show selector
+      document.getElementById('tsPillName').textContent = sessionUser;
+      renderTypeOptions(openTypes);
+      document.getElementById('screenTypeSelect').classList.add('show');
+    }
+
   } else if (auth === 'no_role') {
-    hide();
+    hideAuth();
     document.getElementById('screenDenied').classList.add('show');
     if (user && av) {
       document.getElementById('deniedUserRow').style.display = 'flex';
@@ -342,15 +419,49 @@ let sessionId   = null;
       document.getElementById('deniedAvatar').src            = av;
     }
   } else if (auth === 'not_in_server') {
-    hide(); document.getElementById('screenNoServer').classList.add('show');
+    hideAuth(); document.getElementById('screenNoServer').classList.add('show');
   } else if (auth === 'error') {
-    hide(); document.getElementById('screenError').classList.add('show');
+    hideAuth(); document.getElementById('screenError').classList.add('show');
   } else if (auth === 'denied') {
     document.getElementById('screenAuth').querySelector('.auth-sub').textContent = 'Sign-in was cancelled. Click below to try again.';
   }
 })();
 
-// ── FORM BUILDER ─────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  TYPE SELECTOR
+// ══════════════════════════════════════════════════
+function renderTypeOptions(types) {
+  const list = document.getElementById('typeOptionsList');
+  list.innerHTML = types.map(t => `
+    <div class="type-option ${t.open===false?'ts-closed':''}" onclick="selectType('${t.id}')">
+      <div class="to-icon">${t.icon || '📋'}</div>
+      <div>
+        <div class="to-name">${escHtml(t.name)}</div>
+        <div class="to-desc">${escHtml(t.desc || 'Click to apply')}</div>
+      </div>
+      ${t.open === false ? `<span class="ts-closed-pill">Closed</span>` : `<span class="to-arrow">→</span>`}
+    </div>
+  `).join('');
+}
+
+async function selectType(typeId) {
+  const t = allAppTypes.find(x => x.id === typeId);
+  if (!t) return;
+  document.getElementById('screenTypeSelect').classList.remove('show');
+  await startForm(t);
+}
+
+function backToTypeSelect() {
+  // Reset form state and go back to type selector
+  const openTypes = allAppTypes.filter(x => x.open !== false);
+  if (openTypes.length < 2) return;
+  document.getElementById('mainApp').classList.remove('show');
+  document.getElementById('screenTypeSelect').classList.add('show');
+}
+
+// ══════════════════════════════════════════════════
+//  FORM BUILDER
+// ══════════════════════════════════════════════════
 const STEPS = [
   { title:'Your Profile',           sub:'Basic identity & Discord info',        icon:'#ic-person' },
   { title:'Moderation Experience',  sub:"Tell us what you've done before",       icon:'#ic-star'   },
@@ -358,19 +469,36 @@ const STEPS = [
   { title:'Background & Consent',   sub:'Review & background check disclosure',  icon:'#ic-search' },
 ];
 
-let cur         = 0;
-let questions   = [];
-let formAnswers = {};
+async function startForm(type) {
+  selectedType = type;
+  cur = 0;
 
-async function buildForm() {
+  // Update title/banner
+  if (type) {
+    document.getElementById('formTitle').textContent = type.name;
+    document.getElementById('appTypeBanner').style.display = 'inline-flex';
+    document.getElementById('appTypeBannerIcon').textContent = type.icon || '';
+    document.getElementById('appTypeBannerName').textContent = type.name;
+    // Only show "Change" link if multiple types
+    const changeLink = document.getElementById('appTypeBanner').querySelector('a');
+    const openTypes = allAppTypes.filter(x => x.open !== false);
+    if (changeLink) changeLink.style.display = openTypes.length > 1 ? '' : 'none';
+  }
+
+  // Load questions for this type
   try {
-    questions = await fetch('/api/questions').then(r => r.json());
+    const endpoint = type ? `/api/questions/${type.id}` : '/api/questions';
+    questions = await fetch(endpoint).then(r => r.json());
   } catch { questions = []; }
 
+  // Rebuild form
+  document.getElementById('formSections').innerHTML = '';
   buildProgressBar();
   buildSections();
   syncUI();
   setupCharCounters();
+
+  document.getElementById('mainApp').classList.add('show');
 }
 
 function buildProgressBar() {
@@ -454,12 +582,12 @@ function buildSections() {
     </div>
   </div>`;
 
-  // SECTION 2 — Custom Questions (from API)
+  // SECTION 2 — Dynamic questions per type
   let sec2html = `<div class="section" id="sec2">`;
-  if (questions.length === 0) {
-    sec2html += `<div style="font-size:12px;color:var(--muted);text-align:center;padding:24px">No custom questions have been configured by admin yet.</div>`;
+  if (!questions.length) {
+    sec2html += `<div style="font-size:12px;color:var(--muted);text-align:center;padding:24px">No custom questions have been configured for this application type yet.</div>`;
   } else {
-    questions.forEach((q, i) => {
+    questions.forEach(q => {
       const reqStar = q.required ? `<span class="req">*</span>` : '';
       sec2html += `<div class="field">`;
       if (q.type === 'scenario') {
@@ -525,7 +653,6 @@ function buildSections() {
 }
 
 function setupCharCounters() {
-  // Dynamic question counters
   questions.forEach(q => {
     const t = document.getElementById(`q_${q.id}`);
     const c = document.getElementById(`cc_${q.id}`);
@@ -537,7 +664,6 @@ function setupCharCounters() {
       c.className = 'char-count' + (n >= max ? ' over' : n > max * .9 ? ' warn' : '');
     });
   });
-  // Fixed counters
   [['f_banExplain', 500, 'cc_banExplain'], ['f_extra', 400, 'cc_extra']].forEach(([id, max, cc]) => {
     const t = document.getElementById(id), c = document.getElementById(cc);
     if (!t || !c) return;
@@ -549,7 +675,9 @@ function setupCharCounters() {
   });
 }
 
-// ── NAVIGATION ────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════
 const TOTAL = 4;
 
 function navigate(dir) {
@@ -585,42 +713,42 @@ function syncUI() {
 
 function validate(step) {
   let ok = true;
-  const req = id => {
-    const el = document.getElementById(id);
-    if (!el || el.value.trim()) return true;
-    el.classList.add('error');
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => el.classList.remove('error'), 2000);
-    return ok = false;
-  };
-  if (step === 0) { req('f_age'); req('f_tz'); if (!document.querySelector('input[name="avail"]:checked')) ok = false; }
-  if (step === 1) { if (!document.querySelector('input[name="modExp"]:checked')) ok = false; }
+  if (step === 0) {
+    const age = document.getElementById('f_age');
+    const tz  = document.getElementById('f_tz');
+    if (!age.value.trim()) { age.classList.add('error'); age.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>age.classList.remove('error'),2000); ok=false; }
+    if (!tz.value)         { tz.classList.add('error');  tz.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>tz.classList.remove('error'),2000);  ok=false; }
+    if (!document.querySelector('input[name="avail"]:checked')) ok=false;
+  }
+  if (step === 1) { if (!document.querySelector('input[name="modExp"]:checked')) ok=false; }
   if (step === 2) {
     questions.filter(q => q.required).forEach(q => {
       const el = document.getElementById(`q_${q.id}`);
-      if (el && !el.value.trim()) { el.classList.add('error'); el.scrollIntoView({ behavior:'smooth', block:'center' }); setTimeout(() => el.classList.remove('error'), 2000); ok = false; }
+      if (el && !el.value.trim()) { el.classList.add('error'); el.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>el.classList.remove('error'),2000); ok=false; }
     });
   }
   if (step === 3) {
-    if (!document.querySelector('input[name="banned"]:checked')) ok = false;
-    if (!document.querySelector('input[name="alts"]:checked'))   ok = false;
-    if (!document.getElementById('agreeBox').checked)            ok = false;
+    if (!document.querySelector('input[name="banned"]:checked')) ok=false;
+    if (!document.querySelector('input[name="alts"]:checked'))   ok=false;
+    if (!document.getElementById('agreeBox').checked)            ok=false;
   }
   return ok;
 }
 
-// ── SUBMIT ────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  SUBMIT
+// ══════════════════════════════════════════════════
 async function submitApp() {
   const appId       = 'NODE-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-  const submittedAt = new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+  const submittedAt = new Date().toLocaleString('en-US', { dateStyle:'full', timeStyle:'short' });
+  const typeName    = selectedType ? selectedType.name : 'General';
 
   const val   = id => document.getElementById(id)?.value.trim() || 'Not provided';
   const radio = n  => document.querySelector(`input[name="${n}"]:checked`)?.value || 'Not answered';
-  const checks= n  => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(e => e.value).join(', ') || 'None';
-  const avMap = { lt1: 'Less than 1 hour/day', '1to3': '1–3 hours/day', '3to6': '3–6 hours/day', '6plus': '6+ hours/day' };
-  const cut   = (s, n=1024) => (s || 'Not provided').substring(0, n);
+  const checks= n  => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(e=>e.value).join(', ') || 'None';
+  const avMap = { lt1:'Less than 1 hour/day', '1to3':'1–3 hours/day', '3to6':'3–6 hours/day', '6plus':'6+ hours/day' };
+  const cut   = (s,n=1024) => (s||'Not provided').substring(0,n);
 
-  // Build custom question fields for embed
   const customFields = questions.map(q => ({
     name:  q.label.substring(0, 256),
     value: cut(document.getElementById(`q_${q.id}`)?.value.trim() || 'Not provided'),
@@ -629,37 +757,40 @@ async function submitApp() {
   const payload = {
     username:   'Node — Staff Applications',
     avatar_url: 'https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128',
-    content:    `📋 **NEW STAFF APPLICATION — NODE**\n> ID: \`${appId}\`  •  ${submittedAt}`,
+    content:    `📋 **NEW APPLICATION — NODE — ${typeName.toUpperCase()}**\n> ID: \`${appId}\`  •  ${submittedAt}`,
     embeds: [
       { title: '👤  SECTION 1 — APPLICANT PROFILE', color: 0xffffff, fields: [
-        { name: 'Discord Username',    value: cut(val('f_username')), inline: true },
-        { name: 'Discord User ID',     value: cut(val('f_userid')),   inline: true },
-        { name: 'Age',                 value: cut(val('f_age')),      inline: true },
-        { name: 'Timezone',            value: cut(val('f_tz')),       inline: true },
-        { name: 'Daily Availability',  value: avMap[radio('avail')] || radio('avail'), inline: true },
-        { name: '\u200b',              value: '\u200b', inline: true },
+        { name:'Application Type', value: typeName, inline: true },
+        { name:'Discord Username', value: cut(val('f_username')), inline: true },
+        { name:'Discord User ID',  value: cut(val('f_userid')),   inline: true },
+        { name:'Age',              value: cut(val('f_age')),       inline: true },
+        { name:'Timezone',         value: cut(val('f_tz')),        inline: true },
+        { name:'Daily Availability', value: avMap[radio('avail')] || radio('avail'), inline: true },
       ]},
       { title: '⭐  SECTION 2 — EXPERIENCE', color: 0xcccccc, fields: [
-        { name: 'Prior Mod Experience', value: radio('modExp') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
-        { name: 'Tools Used',           value: cut(checks('tools')), inline: true },
+        { name:'Prior Mod Experience', value: radio('modExp')==='yes'?'✅ YES':'❌ NO', inline:true },
+        { name:'Tools Used',           value: cut(checks('tools')), inline:true },
       ]},
-      { title: '⚡  SECTION 3 — CUSTOM QUESTIONS', color: 0x888888, fields: customFields.length ? customFields : [{ name: 'No questions', value: 'No custom questions configured.' }] },
+      { title: '⚡  SECTION 3 — CUSTOM QUESTIONS', color: 0x888888, fields: customFields.length ? customFields : [{ name:'No questions', value:'No custom questions configured.' }] },
       { title: '🔍  SECTION 4 — BACKGROUND & CONSENT', color: 0x333333, fields: [
-        { name: 'Ever Banned?', value: radio('banned') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
-        { name: 'Has Alts?',    value: radio('alts')   === 'yes' ? '✅ YES' : '❌ NO', inline: true },
-        { name: '\u200b',       value: '\u200b', inline: true },
-        { name: '📝 Ban Explanation',  value: cut(val('f_banExplain')) },
-        { name: '📋 Additional Info',  value: cut(val('f_extra')) },
-        { name: '✅ Background Check Consent', value: 'CONFIRMED' },
-      ], footer: { text: `Application ID: ${appId}  •  Node Staff Portal` }, timestamp: new Date().toISOString() },
+        { name:'Ever Banned?', value: radio('banned')==='yes'?'✅ YES':'❌ NO', inline:true },
+        { name:'Has Alts?',    value: radio('alts')==='yes'?'✅ YES':'❌ NO', inline:true },
+        { name:'\u200b', value:'\u200b', inline:true },
+        { name:'📝 Ban Explanation', value: cut(val('f_banExplain')) },
+        { name:'📋 Additional Info', value: cut(val('f_extra')) },
+        { name:'✅ Background Check Consent', value:'CONFIRMED' },
+      ], footer:{ text:`Application ID: ${appId}  •  Node Staff Portal  •  Type: ${typeName}` }, timestamp:new Date().toISOString() },
     ],
+    // Metadata for MongoDB
+    _appTypeId:   selectedType?.id   || null,
+    _appTypeName: typeName,
   };
 
   const btn = document.getElementById('btnNext');
   btn.disabled = true; btn.textContent = 'Submitting…';
 
-  try { await fetch('/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
-  catch (e) { console.warn('Submit error:', e); }
+  try { await fetch('/submit', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); }
+  catch(e) { console.warn('Submit error:', e); }
 
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('success').style.display     = 'flex';
@@ -669,7 +800,7 @@ async function submitApp() {
 }
 
 function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
 </body>
