@@ -6,229 +6,189 @@
 <title>Node — Staff Application</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:      #080808;
-    --surface: #111111;
-    --sur2:    #171717;
-    --sur3:    #1e1e1e;
-    --border:  #2a2a2a;
-    --border2: #333333;
-    --accent:  #ffffff;
-    --accent2: #cccccc;
-    --dim:     #888888;
-    --muted:   #555555;
-    --text:    #e8e8e8;
-  }
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Space Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+:root{--bg:#080808;--surface:#111111;--sur2:#171717;--sur3:#1e1e1e;--border:#2a2a2a;--border2:#333333;--dim:#888888;--muted:#555555;--text:#e8e8e8}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Space Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:48px 48px}
+.screen{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+.screen.show{display:flex}
 
-  body::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
+/* AUTH CARD */
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:52px 44px;max-width:440px;width:100%;text-align:center;position:relative;z-index:1;animation:fadeUp .5s ease both;box-shadow:0 32px 64px rgba(0,0,0,.6)}
+.auth-logo{width:72px;height:72px;border-radius:14px;background:var(--sur2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;overflow:hidden}
+.auth-logo img{width:100%;height:100%;object-fit:cover;border-radius:14px}
+.auth-server{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.auth-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px;color:#fff;margin-bottom:12px}
+.auth-sub{font-size:11px;color:var(--dim);line-height:1.8;margin-bottom:36px}
+.auth-note{font-size:10px;color:var(--muted);margin-top:18px;line-height:1.6}
 
-  .screen { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; background: var(--bg); }
-  .screen.show { display: flex; }
+/* DISCORD BUTTON */
+.btn-discord{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#5865F2;color:#fff;border:none;border-radius:10px;padding:14px 28px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(88,101,242,.35)}
+.btn-discord:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 8px 32px rgba(88,101,242,.45)}
 
-  .auth-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 52px 44px; max-width: 440px; width: 100%; text-align: center; position: relative; z-index: 1; animation: fadeUp .5s ease both; box-shadow: 0 32px 64px rgba(0,0,0,.6); }
-  .auth-logo { width: 72px; height: 72px; border-radius: 14px; background: var(--sur2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; overflow: hidden; }
-  .auth-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-  .auth-server { font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-  .auth-title { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: #fff; margin-bottom: 12px; }
-  .auth-sub { font-size: 11px; color: var(--dim); line-height: 1.8; margin-bottom: 36px; }
-  .auth-note { font-size: 10px; color: var(--muted); margin-top: 18px; line-height: 1.6; }
+/* DENIED / WARN CARDS */
+.denied-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;max-width:480px;width:100%;overflow:hidden;position:relative;z-index:1;animation:fadeUp .5s ease both;box-shadow:0 32px 64px rgba(0,0,0,.6)}
+.denied-top{background:var(--sur2);border-bottom:1px solid var(--border);padding:36px 36px 28px;text-align:center}
+.denied-icon-ring{width:80px;height:80px;border-radius:50%;background:var(--sur3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.denied-title{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:6px}
+.denied-sub{font-size:11px;color:var(--dim);line-height:1.7}
+.denied-body{padding:24px 36px 32px}
+.denied-user-row{display:flex;align-items:center;gap:12px;background:var(--sur2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:20px}
+.denied-avatar{width:40px;height:40px;border-radius:50%;border:1px solid var(--border2);flex-shrink:0}
+.denied-username{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.denied-tag{font-size:10px;color:var(--muted);margin-top:2px}
+.no-access-pill{margin-left:auto;background:var(--sur3);border:1px solid var(--border2);border-radius:20px;padding:3px 10px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.5px}
+.reason-box{background:var(--sur2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px}
+.reason-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.reason-text{font-size:11px;color:var(--dim);line-height:1.8}
+.reason-text strong{color:var(--text)}
+.denied-actions{display:flex;flex-direction:column;gap:10px}
+.btn-retry{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1px solid var(--border2);color:var(--dim);border-radius:8px;padding:11px 20px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-retry:hover{border-color:#fff;color:#fff}
+.warn-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;max-width:460px;width:100%;overflow:hidden;position:relative;z-index:1;animation:fadeUp .5s ease both;box-shadow:0 32px 64px rgba(0,0,0,.6)}
+.warn-top{background:var(--sur2);border-bottom:1px solid var(--border);padding:36px 36px 28px;text-align:center}
+.warn-icon-ring{width:80px;height:80px;border-radius:50%;background:var(--sur3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.warn-title{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
+.warn-sub{font-size:11px;color:var(--dim);line-height:1.7}
+.warn-body{padding:24px 36px 32px;display:flex;flex-direction:column;gap:12px}
 
-  /* FIXED Discord button — dark bg so negative-space "eyes" are visible */
-  .btn-discord {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    width: 100%; background: #5865F2; color: #fff;
-    border: none; border-radius: 10px; padding: 14px 28px;
-    font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-    text-decoration: none; transition: all .2s;
-    box-shadow: 0 4px 20px rgba(88,101,242,.35);
-  }
-  .btn-discord:hover { background: #4752c4; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(88,101,242,.45); }
-  /* The discord icon SVG inside the button uses currentColor = white, so eyes (negative cutouts) show against #5865F2 */
+/* USER PILL */
+#userPill{position:fixed;top:16px;right:16px;z-index:50;display:none;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border2);border-radius:40px;padding:8px 14px 8px 8px;box-shadow:0 4px 24px rgba(0,0,0,.5);animation:fadeDown .4s ease both}
+#userPill.show{display:flex}
+#pillAvatar{width:32px;height:32px;border-radius:50%;border:1px solid var(--border2)}
+#pillName{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.pill-verified{display:flex;align-items:center;gap:4px;background:var(--sur2);border:1px solid var(--border2);border-radius:20px;padding:2px 8px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:var(--dim)}
 
-  .denied-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; max-width: 480px; width: 100%; overflow: hidden; position: relative; z-index: 1; animation: fadeUp .5s ease both; box-shadow: 0 32px 64px rgba(0,0,0,.6); }
-  .denied-top { background: var(--sur2); border-bottom: 1px solid var(--border); padding: 36px 36px 28px; text-align: center; }
-  .denied-icon-ring { width: 80px; height: 80px; border-radius: 50%; background: var(--sur3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-  .denied-title { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .denied-sub   { font-size: 11px; color: var(--dim); line-height: 1.7; }
-  .denied-body  { padding: 24px 36px 32px; }
-  .denied-user-row { display: flex; align-items: center; gap: 12px; background: var(--sur2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; }
-  .denied-avatar   { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border2); flex-shrink: 0; }
-  .denied-username { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
-  .denied-tag      { font-size: 10px; color: var(--muted); margin-top: 2px; }
-  .no-access-pill  { margin-left: auto; background: var(--sur3); border: 1px solid var(--border2); border-radius: 20px; padding: 3px 10px; font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; color: var(--dim); letter-spacing: .5px; }
-  .reason-box   { background: var(--sur2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 20px; }
-  .reason-label { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-  .reason-text  { font-size: 11px; color: var(--dim); line-height: 1.8; }
-  .reason-text strong { color: var(--text); }
-  .denied-actions { display: flex; flex-direction: column; gap: 10px; }
-  .btn-retry { display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; border: 1px solid var(--border2); color: var(--dim); border-radius: 8px; padding: 11px 20px; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all .2s; }
-  .btn-retry:hover { border-color: #fff; color: #fff; }
+/* MAIN APP */
+#mainApp{display:none}
+#mainApp.show{display:block}
+.container{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:48px 24px 80px}
+.header{text-align:center;margin-bottom:48px;animation:fadeDown .6s ease both}
+.server-mark{display:inline-flex;align-items:center;gap:10px;margin-bottom:24px}
+.server-logo{width:40px;height:40px;border-radius:10px;border:1px solid var(--border2);overflow:hidden}
+.server-logo img{width:100%;height:100%;object-fit:cover}
+.server-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--border2);border-radius:6px;padding:6px 16px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+.badge-pulse{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1.8s ease infinite}
+h1{font-family:'Rajdhani',sans-serif;font-size:clamp(30px,6vw,50px);font-weight:700;letter-spacing:-1px;line-height:1.1;color:#fff;margin-bottom:14px}
+.subtitle{color:var(--dim);font-size:12px;line-height:1.8;max-width:500px;margin:0 auto}
+.warn-banner{display:flex;gap:14px;background:var(--sur2);border:1px solid var(--border2);border-left:2px solid #fff;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:36px;align-items:flex-start;animation:fadeUp .5s .2s ease both}
+.warn-banner p{font-size:11px;color:var(--dim);line-height:1.8}
+.warn-banner strong{color:var(--text)}
 
-  .warn-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; max-width: 460px; width: 100%; overflow: hidden; position: relative; z-index: 1; animation: fadeUp .5s ease both; box-shadow: 0 32px 64px rgba(0,0,0,.6); }
-  .warn-top  { background: var(--sur2); border-bottom: 1px solid var(--border); padding: 36px 36px 28px; text-align: center; }
-  .warn-icon-ring { width: 80px; height: 80px; border-radius: 50%; background: var(--sur3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-  .warn-title { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .warn-sub   { font-size: 11px; color: var(--dim); line-height: 1.7; }
-  .warn-body  { padding: 24px 36px 32px; display: flex; flex-direction: column; gap: 12px; }
+/* PROGRESS */
+.progress-bar{display:flex;align-items:center;margin-bottom:40px;animation:fadeUp .5s .3s ease both}
+.step{display:flex;flex-direction:column;align-items:center;flex:1;cursor:default}
+.step-dot{width:32px;height:32px;border-radius:50%;border:1px solid var(--border2);background:var(--sur2);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--muted);transition:all .3s;position:relative;z-index:1}
+.step.active .step-dot{border-color:#fff;background:#fff;color:#000;box-shadow:0 0 20px rgba(255,255,255,.2)}
+.step.done .step-dot{border-color:var(--border2);background:var(--sur3);color:var(--dim)}
+.step-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:8px;text-align:center}
+.step.active .step-label{color:#fff}
+.step-line{flex:1;height:1px;background:var(--border);margin-top:-16px;transition:background .4s}
+.step-line.done{background:var(--border2)}
 
-  #userPill { position: fixed; top: 16px; right: 16px; z-index: 50; display: none; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border2); border-radius: 40px; padding: 8px 14px 8px 8px; box-shadow: 0 4px 24px rgba(0,0,0,.5); animation: fadeDown .4s ease both; }
-  #userPill.show { display: flex; }
-  #pillAvatar { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border2); }
-  #pillName   { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; color: #fff; }
-  .pill-verified { display: flex; align-items: center; gap: 4px; background: var(--sur2); border: 1px solid var(--border2); border-radius: 20px; padding: 2px 8px; font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; color: var(--dim); }
+/* FORM CARD */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;animation:fadeUp .6s .1s ease both}
+.card-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--sur2)}
+.card-icon{width:36px;height:36px;border-radius:8px;background:var(--sur3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:.5px;color:#fff}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.step-pill{margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.section{display:none;padding:28px;flex-direction:column;gap:22px}
+.section.active{display:flex;animation:fadeUp .3s ease both}
 
-  #mainApp { display: none; }
-  #mainApp.show { display: block; }
-  .container { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+/* FIELDS */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:8px}
+label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+label .req{color:#fff;font-size:14px}
+label .tip{font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;font-family:'Space Mono',monospace;color:var(--muted);margin-left:auto}
+input[type="text"],input[type="number"],select,textarea{background:var(--sur2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:'Space Mono',monospace;font-size:12px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#444;box-shadow:0 0 0 3px rgba(255,255,255,.04)}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+select option{background:var(--sur2)}
+textarea{min-height:110px;line-height:1.7}
+input[readonly]{opacity:.5;cursor:not-allowed}
+.char-count{font-size:10px;color:var(--muted);text-align:right;margin-top:-4px;font-family:'Space Mono',monospace}
+.char-count.warn{color:var(--dim)}
+.char-count.over{color:#fff}
+.radio-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt{display:flex;align-items:flex-start;gap:12px;background:var(--sur2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .2s}
+.radio-opt:hover{border-color:var(--border2)}
+.radio-opt input[type="radio"]{width:15px;height:15px;accent-color:#fff;flex-shrink:0;margin-top:2px}
+.radio-opt-label{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--text)}
+.radio-opt-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.check-grid{grid-template-columns:1fr}}
+.check-opt{display:flex;align-items:center;gap:10px;background:var(--sur2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .2s;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:var(--dim)}
+.check-opt:hover{border-color:var(--border2);color:var(--text)}
+.check-opt input[type="checkbox"]{width:14px;height:14px;accent-color:#fff;flex-shrink:0}
+.field-hint{font-size:11px;color:var(--dim);line-height:1.7;margin-top:-4px;padding:10px 12px;background:var(--sur3);border-left:2px solid var(--border2);border-radius:0 6px 6px 0}
+.scenario-desc{font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px;font-style:italic}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-family:'Rajdhani',sans-serif;font-weight:600}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  .header { text-align: center; margin-bottom: 48px; animation: fadeDown .6s ease both; }
-  .server-mark { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px; }
-  .server-logo { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border2); overflow: hidden; }
-  .server-logo img { width: 100%; height: 100%; object-fit: cover; }
-  .server-name { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
-  .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--sur2); border: 1px solid var(--border2); border-radius: 6px; padding: 6px 16px; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
-  .badge-pulse { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1.8s ease infinite; }
-  h1 { font-family: 'Rajdhani', sans-serif; font-size: clamp(30px,6vw,50px); font-weight: 700; letter-spacing: -1px; line-height: 1.1; color: #fff; margin-bottom: 14px; }
-  .subtitle { color: var(--dim); font-size: 12px; line-height: 1.8; max-width: 500px; margin: 0 auto; }
+/* BACKGROUND SECTION */
+.bg-banner{background:var(--sur2);border:1px solid var(--border2);border-radius:12px;padding:20px;display:flex;gap:16px;align-items:flex-start}
+.bg-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;color:#fff;display:flex;align-items:center;gap:8px}
+.bg-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.bg-text{font-size:11px;color:var(--dim);line-height:1.8}
+.bg-servers{display:flex;gap:8px;margin:10px 0 6px;flex-wrap:wrap}
+.bg-pill{display:flex;align-items:center;gap:6px;background:var(--sur3);border:1px solid var(--border2);border-radius:6px;padding:5px 12px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--dim)}
+.bg-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bg-tag{background:var(--sur3);border:1px solid var(--border);border-radius:4px;padding:3px 10px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;color:var(--muted)}
+.hr-badge{display:inline-flex;align-items:center;gap:5px;background:var(--sur3);border:1px solid var(--border2);border-radius:4px;padding:2px 8px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase}
+.agree-row{display:flex;align-items:flex-start;gap:12px;background:var(--sur2);border:1px solid var(--border2);border-left:2px solid #fff;border-radius:0 8px 8px 0;padding:16px;cursor:pointer}
+.agree-row input[type="checkbox"]{width:15px;height:15px;accent-color:#fff;flex-shrink:0;margin-top:2px}
+.agree-text{font-size:11px;color:var(--dim);line-height:1.8}
+.agree-text strong{color:var(--text)}
 
-  .warn-banner { display: flex; gap: 14px; background: var(--sur2); border: 1px solid var(--border2); border-left: 2px solid #fff; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 36px; align-items: flex-start; animation: fadeUp .5s .2s ease both; }
-  .warn-banner p { font-size: 11px; color: var(--dim); line-height: 1.8; }
-  .warn-banner strong { color: var(--text); }
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;border-top:1px solid var(--border);background:var(--sur2);gap:12px}
+.btn{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:8px;padding:11px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-back{background:transparent;border:1px solid var(--border2);color:var(--muted)}
+.btn-back:hover{border-color:var(--dim);color:var(--dim)}
+.btn-next{background:#fff;color:#000;box-shadow:0 4px 20px rgba(255,255,255,.1)}
+.btn-next:hover{background:#e8e8e8;box-shadow:0 4px 28px rgba(255,255,255,.18);transform:translateY(-1px)}
+.btn-next:disabled{background:var(--sur3);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none;border:1px solid var(--border)}
+.btn-submit{background:#fff;color:#000;box-shadow:0 4px 20px rgba(255,255,255,.12)}
+.btn-submit:hover{background:#e8e8e8;transform:translateY(-1px);box-shadow:0 6px 32px rgba(255,255,255,.18)}
 
-  .progress-bar { display: flex; align-items: center; margin-bottom: 40px; animation: fadeUp .5s .3s ease both; }
-  .step  { display: flex; flex-direction: column; align-items: center; flex: 1; cursor: default; }
-  .step-dot { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border2); background: var(--sur2); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; color: var(--muted); transition: all .3s; position: relative; z-index: 1; }
-  .step.active .step-dot { border-color: #fff; background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,.2); }
-  .step.done   .step-dot { border-color: var(--border2); background: var(--sur3); color: var(--dim); }
-  .step-label { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 8px; text-align: center; }
-  .step.active .step-label { color: #fff; }
-  .step.done   .step-label { color: var(--muted); }
-  .step-line { flex: 1; height: 1px; background: var(--border); margin-top: -16px; transition: background .4s; }
-  .step-line.done { background: var(--border2); }
+/* SUCCESS */
+#success{display:none;text-align:center;padding:64px 28px;flex-direction:column;align-items:center;gap:20px}
+.success-ring{width:80px;height:80px;border-radius:50%;background:var(--sur2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;font-size:28px;color:#fff}
+.success-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#fff;letter-spacing:-.5px}
+.success-sub{font-size:12px;color:var(--dim);line-height:1.8;max-width:420px}
+.app-id{background:var(--sur2);border:1px solid var(--border2);border-radius:8px;padding:10px 20px;font-size:11px;color:var(--muted)}
+.app-id span{color:#fff;font-weight:700}
+input.error,select.error,textarea.error{border-color:var(--dim)!important;box-shadow:0 0 0 2px rgba(255,255,255,.05)!important}
+.ico{display:inline-block;vertical-align:middle;flex-shrink:0}
 
-  .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp .6s .1s ease both; }
-  .card-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: var(--sur2); }
-  .card-icon  { width: 36px; height: 36px; border-radius: 8px; background: var(--sur3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; }
-  .card-title { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: .5px; color: #fff; }
-  .card-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .step-pill  { margin-left: auto; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-
-  .section { display: none; padding: 28px; flex-direction: column; gap: 22px; }
-  .section.active { display: flex; animation: fadeUp .3s ease both; }
-
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media(max-width:560px){ .field-row { grid-template-columns: 1fr; } }
-  .field { display: flex; flex-direction: column; gap: 8px; }
-  label { font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  label .req { color: #fff; font-size: 14px; }
-  label .tip { font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; font-family: 'Space Mono', monospace; color: var(--muted); margin-left: auto; }
-
-  input[type="text"], input[type="number"], select, textarea { background: var(--sur2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 12px; outline: none; transition: border-color .2s, box-shadow .2s; width: 100%; resize: vertical; }
-  input:focus, select:focus, textarea:focus { border-color: #444; box-shadow: 0 0 0 3px rgba(255,255,255,.04); }
-  input::placeholder, textarea::placeholder { color: var(--muted); }
-  select option { background: var(--sur2); }
-  textarea { min-height: 110px; line-height: 1.7; }
-  input[readonly] { opacity: .5; cursor: not-allowed; }
-
-  .char-count      { font-size: 10px; color: var(--muted); text-align: right; margin-top: -4px; font-family: 'Space Mono', monospace; }
-  .char-count.warn { color: var(--dim); }
-  .char-count.over { color: #fff; }
-
-  .radio-group { display: flex; flex-direction: column; gap: 8px; }
-  .radio-opt { display: flex; align-items: flex-start; gap: 12px; background: var(--sur2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: border-color .2s; }
-  .radio-opt:hover { border-color: var(--border2); }
-  .radio-opt input[type="radio"] { width: 15px; height: 15px; accent-color: #fff; flex-shrink: 0; margin-top: 2px; }
-  .radio-opt-label { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); }
-  .radio-opt-desc  { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  @media(max-width:560px){ .check-grid { grid-template-columns: 1fr; } }
-  .check-opt { display: flex; align-items: center; gap: 10px; background: var(--sur2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: border-color .2s; font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--dim); }
-  .check-opt:hover { border-color: var(--border2); color: var(--text); }
-  .check-opt input[type="checkbox"] { width: 14px; height: 14px; accent-color: #fff; flex-shrink: 0; }
-
-  .field-hint { font-size: 11px; color: var(--dim); line-height: 1.7; margin-top: -4px; padding: 10px 12px; background: var(--sur3); border-left: 2px solid var(--border2); border-radius: 0 6px 6px 0; }
-  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; font-weight: 600; }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  .bg-banner { background: var(--sur2); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; display: flex; gap: 16px; align-items: flex-start; }
-  .bg-title    { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #fff; display: flex; align-items: center; gap: 8px; }
-  .bg-subtitle { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-  .bg-text     { font-size: 11px; color: var(--dim); line-height: 1.8; }
-  .bg-servers  { display: flex; gap: 8px; margin: 10px 0 6px; flex-wrap: wrap; }
-  .bg-pill     { display: flex; align-items: center; gap: 6px; background: var(--sur3); border: 1px solid var(--border2); border-radius: 6px; padding: 5px 12px; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700; color: var(--dim); }
-  .bg-tags     { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .bg-tag      { background: var(--sur3); border: 1px solid var(--border); border-radius: 4px; padding: 3px 10px; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 600; color: var(--muted); }
-  .hr-badge    { display: inline-flex; align-items: center; gap: 5px; background: var(--sur3); border: 1px solid var(--border2); border-radius: 4px; padding: 2px 8px; font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--dim); text-transform: uppercase; }
-
-  .agree-row { display: flex; align-items: flex-start; gap: 12px; background: var(--sur2); border: 1px solid var(--border2); border-left: 2px solid #fff; border-radius: 0 8px 8px 0; padding: 16px; cursor: pointer; }
-  .agree-row input[type="checkbox"] { width: 15px; height: 15px; accent-color: #fff; flex-shrink: 0; margin-top: 2px; }
-  .agree-text { font-size: 11px; color: var(--dim); line-height: 1.8; }
-  .agree-text strong { color: var(--text); }
-
-  .nav-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; border-top: 1px solid var(--border); background: var(--sur2); gap: 12px; }
-  .btn { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 8px; padding: 11px 24px; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; }
-  .btn-back   { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
-  .btn-back:hover { border-color: var(--dim); color: var(--dim); }
-  .btn-next   { background: #fff; color: #000; box-shadow: 0 4px 20px rgba(255,255,255,.1); }
-  .btn-next:hover { background: #e8e8e8; box-shadow: 0 4px 28px rgba(255,255,255,.18); transform: translateY(-1px); }
-  .btn-next:disabled { background: var(--sur3); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; border: 1px solid var(--border); }
-  .btn-submit { background: #fff; color: #000; box-shadow: 0 4px 20px rgba(255,255,255,.12); }
-  .btn-submit:hover { background: #e8e8e8; transform: translateY(-1px); box-shadow: 0 6px 32px rgba(255,255,255,.18); }
-
-  #success { display: none; text-align: center; padding: 64px 28px; flex-direction: column; align-items: center; gap: 20px; }
-  .success-ring { width: 80px; height: 80px; border-radius: 50%; background: var(--sur2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; font-size: 28px; color: #fff; }
-  .success-title { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
-  .success-sub   { font-size: 12px; color: var(--dim); line-height: 1.8; max-width: 420px; }
-  .app-id        { background: var(--sur2); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 20px; font-size: 11px; color: var(--muted); }
-  .app-id span   { color: #fff; font-weight: 700; }
-
-  input.error, select.error, textarea.error { border-color: var(--dim) !important; box-shadow: 0 0 0 2px rgba(255,255,255,.05) !important; }
-  .ico { display: inline-block; vertical-align: middle; flex-shrink: 0; }
-
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
-  @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:.2} }
-  @keyframes pop      { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="ic-shield" viewBox="0 0 24 24"><path fill="#666" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.4C16.6 21.15 20 16.25 20 11V5l-8-3z"/><path fill="#fff" opacity=".15" d="M12 2L4 5v6c0 2.6.85 5.1 2.3 7.1L20 7.4V5l-8-3z"/><path fill="#fff" opacity=".6" d="M11 15.5l-3-3 1.4-1.4 1.6 1.6 3.6-3.6L16 10.5l-5 5z"/></symbol>
-    <symbol id="ic-lock" viewBox="0 0 24 24"><rect fill="rgba(255,255,255,.07)" x="5" y="11" width="14" height="10" rx="3"/><rect fill="none" stroke="#555" stroke-width="1.8" x="5" y="11" width="14" height="10" rx="3"/><path fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" d="M8 11V7a4 4 0 018 0v4"/><circle fill="#fff" cx="12" cy="16" r="1.5"/></symbol>
-    <!-- Discord icon: body silhouette + explicit left eye + explicit right eye as separate filled paths -->
-    <symbol id="ic-discord" viewBox="0 0 127.14 96.36">
-      <path fill="currentColor" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-    </symbol>
-    <symbol id="ic-x" viewBox="0 0 24 24"><circle fill="rgba(255,255,255,.05)" cx="12" cy="12" r="10"/><circle fill="none" stroke="#444" stroke-width="1.5" cx="12" cy="12" r="10"/><path fill="none" stroke="#777" stroke-width="2.5" stroke-linecap="round" d="M8 8l8 8M16 8l-8 8"/></symbol>
-    <symbol id="ic-warn" viewBox="0 0 24 24"><path fill="#666" d="M12 2L1 21h22L12 2z"/><rect fill="#111" x="11" y="9" width="2" height="6" rx="1"/><circle fill="#111" cx="12" cy="17.5" r="1"/></symbol>
-    <symbol id="ic-check" viewBox="0 0 24 24"><circle fill="rgba(255,255,255,.07)" cx="12" cy="12" r="11"/><circle fill="none" stroke="#444" stroke-width="1.5" cx="12" cy="12" r="11"/><path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5l3.5 3.5 6.5-7"/></symbol>
-    <symbol id="ic-person" viewBox="0 0 24 24"><circle fill="#777" cx="12" cy="8" r="4"/><path fill="#777" d="M4 20c0-4 3.6-7 8-7s8 3 8 7H4z"/></symbol>
-    <symbol id="ic-star" viewBox="0 0 24 24"><path fill="#777" d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></symbol>
-    <symbol id="ic-bolt" viewBox="0 0 24 24"><path fill="#777" d="M13 2L4.5 13.5H11L10 22l9.5-12H13z"/></symbol>
-    <symbol id="ic-search" viewBox="0 0 24 24"><circle fill="none" stroke="#555" stroke-width="2.2" cx="10.5" cy="10.5" r="6.5"/><path stroke="#555" stroke-width="2.5" stroke-linecap="round" d="M15.5 15.5L21 21"/><circle fill="#555" cx="10.5" cy="10.5" r="3" opacity=".3"/></symbol>
-    <symbol id="ic-server" viewBox="0 0 24 24"><rect fill="rgba(255,255,255,.05)" x="3" y="4" width="18" height="5" rx="2.5"/><rect fill="rgba(255,255,255,.05)" x="3" y="11" width="18" height="5" rx="2.5"/><rect fill="none" stroke="#555" stroke-width="1.5" x="3" y="4" width="18" height="5" rx="2.5"/><rect fill="none" stroke="#555" stroke-width="1.5" x="3" y="11" width="18" height="5" rx="2.5"/><circle fill="#888" cx="17.5" cy="6.5" r="1.2"/><circle fill="#555" cx="17.5" cy="13.5" r="1.2"/></symbol>
-    <symbol id="ic-hr" viewBox="0 0 24 24"><rect fill="rgba(255,255,255,.05)" x="2" y="5" width="20" height="14" rx="3"/><rect fill="none" stroke="#555" stroke-width="1.5" x="2" y="5" width="20" height="14" rx="3"/><circle fill="#777" cx="9" cy="11" r="2.5"/><path fill="#777" d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5"/></symbol>
-  </defs>
-</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ic-shield" viewBox="0 0 24 24"><path fill="#666" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.4C16.6 21.15 20 16.25 20 11V5l-8-3z"/><path fill="#fff" opacity=".15" d="M12 2L4 5v6c0 2.6.85 5.1 2.3 7.1L20 7.4V5l-8-3z"/><path fill="#fff" opacity=".6" d="M11 15.5l-3-3 1.4-1.4 1.6 1.6 3.6-3.6L16 10.5l-5 5z"/></symbol>
+  <symbol id="ic-x" viewBox="0 0 24 24"><circle fill="rgba(255,255,255,.05)" cx="12" cy="12" r="10"/><circle fill="none" stroke="#444" stroke-width="1.5" cx="12" cy="12" r="10"/><path fill="none" stroke="#777" stroke-width="2.5" stroke-linecap="round" d="M8 8l8 8M16 8l-8 8"/></symbol>
+  <symbol id="ic-warn" viewBox="0 0 24 24"><path fill="#666" d="M12 2L1 21h22L12 2z"/><rect fill="#111" x="11" y="9" width="2" height="6" rx="1"/><circle fill="#111" cx="12" cy="17.5" r="1"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><circle fill="rgba(255,255,255,.07)" cx="12" cy="12" r="11"/><circle fill="none" stroke="#444" stroke-width="1.5" cx="12" cy="12" r="11"/><path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5l3.5 3.5 6.5-7"/></symbol>
+  <symbol id="ic-person" viewBox="0 0 24 24"><circle fill="#777" cx="12" cy="8" r="4"/><path fill="#777" d="M4 20c0-4 3.6-7 8-7s8 3 8 7H4z"/></symbol>
+  <symbol id="ic-star" viewBox="0 0 24 24"><path fill="#777" d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></symbol>
+  <symbol id="ic-bolt" viewBox="0 0 24 24"><path fill="#777" d="M13 2L4.5 13.5H11L10 22l9.5-12H13z"/></symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24"><circle fill="none" stroke="#555" stroke-width="2.2" cx="10.5" cy="10.5" r="6.5"/><path stroke="#555" stroke-width="2.5" stroke-linecap="round" d="M15.5 15.5L21 21"/><circle fill="#555" cx="10.5" cy="10.5" r="3" opacity=".3"/></symbol>
+  <symbol id="ic-discord" viewBox="0 0 127.14 96.36"><path fill="currentColor" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></symbol>
+</defs></svg>
 
-<!-- AUTH GATE -->
+<!-- AUTH -->
 <div id="screenAuth" class="screen show">
   <div class="auth-card">
-    <div class="auth-logo">
-      <img src="https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128" alt="Node" onerror="this.style.display='none'">
-    </div>
+    <div class="auth-logo"><img src="https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128" alt="Node" onerror="this.style.display='none'"></div>
     <div class="auth-server">Node</div>
     <div class="auth-title">Staff Application</div>
     <p class="auth-sub">This application is restricted to verified server members. Sign in with Discord to verify your eligibility before proceeding.</p>
@@ -274,7 +234,7 @@
     <div class="warn-body">
       <div class="reason-box" style="margin-bottom:0">
         <div class="reason-label"><svg class="ico" width="12" height="12"><use href="#ic-warn"/></svg>What you need to do</div>
-        <div class="reason-text">Join the Node server first, then return here to apply. Once you're a member and have been granted the eligibility role, you can submit your application.</div>
+        <div class="reason-text">Join the Node server first, then return here to apply.</div>
       </div>
       <a href="https://discord.gg/" class="btn-discord" style="border-radius:8px;padding:11px 20px;font-size:13px"><svg class="ico" width="18" height="18"><use href="#ic-discord"/></svg>Join Node</a>
       <a href="/auth/discord" class="btn-retry">↺ Try again</a>
@@ -319,134 +279,18 @@
     <p><strong>Important:</strong> Submitting false information — including fake experience or misrepresented bans — will result in a <strong>permanent ban</strong> from the server and all affiliated communities. Be honest.</p>
   </div>
 
-  <div class="progress-bar" id="progressBar">
-    <div class="step active" id="s0"><div class="step-dot">1</div><div class="step-label">Profile</div></div>
-    <div class="step-line" id="l0"></div>
-    <div class="step" id="s1"><div class="step-dot">2</div><div class="step-label">Experience</div></div>
-    <div class="step-line" id="l1"></div>
-    <div class="step" id="s2"><div class="step-dot">3</div><div class="step-label">Scenarios</div></div>
-    <div class="step-line" id="l2"></div>
-    <div class="step" id="s3"><div class="step-dot">4</div><div class="step-label">Background</div></div>
-  </div>
+  <!-- Progress bar built by JS -->
+  <div class="progress-bar" id="progressBar"></div>
 
   <div class="form-card">
     <div class="card-header">
       <div class="card-icon" id="cardIconWrap"><svg width="18" height="18"><use href="#ic-person"/></svg></div>
-      <div><div class="card-title" id="cardTitle">Your Profile</div><div class="card-sub" id="cardSub">Basic identity &amp; Discord info</div></div>
-      <div class="step-pill" id="stepPill">Step 1 of 4</div>
+      <div><div class="card-title" id="cardTitle">Loading…</div><div class="card-sub" id="cardSub"></div></div>
+      <div class="step-pill" id="stepPill"></div>
     </div>
 
-    <!-- SECTION 1 -->
-    <div class="section active" id="sec0">
-      <div class="field-row">
-        <div class="field"><label>Discord Username <span class="req">*</span></label><input type="text" id="username" placeholder="username or user#0000"></div>
-        <div class="field"><label>Discord User ID <span class="req">*</span><span class="tip">Auto-filled from login</span></label><input type="text" id="userid" placeholder="Auto-filled" readonly></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>Age <span class="req">*</span></label><input type="number" id="age" placeholder="Must be 14+" min="14" max="99"></div>
-        <div class="field"><label>Timezone <span class="req">*</span></label>
-          <select id="timezone"><option value="">— Select —</option><option>UTC-12 (Baker Island)</option><option>UTC-8 (PST)</option><option>UTC-7 (MST)</option><option>UTC-6 (CST)</option><option>UTC-5 (EST)</option><option>UTC-4 (AST)</option><option>UTC-3 (BRT)</option><option>UTC+0 (GMT/UTC)</option><option>UTC+1 (CET)</option><option>UTC+2 (EET)</option><option>UTC+3 (MSK)</option><option>UTC+5:30 (IST)</option><option>UTC+7 (ICT)</option><option>UTC+8 (CST/SGT)</option><option>UTC+9 (JST)</option><option>UTC+10 (AEST)</option><option>UTC+12 (NZST)</option></select>
-        </div>
-      </div>
-      <div class="field"><label>Average Daily Availability <span class="req">*</span></label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="avail" value="lt1"><div><div class="radio-opt-label">Less than 1 hour/day</div><div class="radio-opt-desc">Very limited — may not be sufficient for staff duties</div></div></label>
-          <label class="radio-opt"><input type="radio" name="avail" value="1to3"><div><div class="radio-opt-label">1–3 hours/day</div><div class="radio-opt-desc">Part-time — suitable for off-peak coverage</div></div></label>
-          <label class="radio-opt"><input type="radio" name="avail" value="3to6"><div><div class="radio-opt-label">3–6 hours/day</div><div class="radio-opt-desc">Good commitment level</div></div></label>
-          <label class="radio-opt"><input type="radio" name="avail" value="6plus"><div><div class="radio-opt-label">6+ hours/day</div><div class="radio-opt-desc">High availability — strong candidate</div></div></label>
-        </div>
-      </div>
-      <div class="field"><label>Why do you want to be on staff? <span class="req">*</span></label><textarea id="why" maxlength="600" placeholder="Tell us your genuine motivation. Don't just say 'to help' — give us specifics about what drives you."></textarea><div class="char-count" id="ccWhy">0 / 600</div></div>
-    </div>
-
-    <!-- SECTION 2 -->
-    <div class="section" id="sec1">
-      <div class="field"><label>Have you moderated a Discord server before? <span class="req">*</span></label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="modExp" value="yes"><div><div class="radio-opt-label">Yes — I have prior experience</div></div></label>
-          <label class="radio-opt"><input type="radio" name="modExp" value="no"><div><div class="radio-opt-label">No — this would be my first time</div></div></label>
-        </div>
-      </div>
-      <div class="field"><label>Current Server Invite Links <span class="req">*</span></label>
-        <div class="field-hint">List <strong>every server</strong> where you currently hold a staff or moderation role. Our HR team will verify your standing in <strong>all listed servers</strong>.<br><br><strong>No current roles?</strong> Type <strong>N/A</strong> — this will not disqualify you.</div>
-        <textarea id="serverInvites" maxlength="800" style="min-height:130px;margin-top:4px" placeholder="• discord.gg/example1 — Server Name (role: Moderator)&#10;• discord.gg/example2 — Server Name (role: Admin)&#10;&#10;No experience? Type: N/A"></textarea>
-        <div class="char-count" id="ccInvites">0 / 800</div>
-      </div>
-      <div class="field"><label>Previous Server(s) &amp; Role(s)</label>
-        <div class="field-hint" style="margin-bottom:6px">List servers you previously moderated. No past experience? Type <strong>N/A</strong>.</div>
-        <textarea id="prevServers" maxlength="700" placeholder="Server name, approx member count, your role, and how long you held it."></textarea>
-        <div class="char-count" id="ccPrev">0 / 700</div>
-      </div>
-      <div class="field"><label>Moderation tools you've used <span class="req">*</span></label>
-        <div class="check-grid">
-          <label class="check-opt"><input type="checkbox" name="tools" value="MEE6"> MEE6</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Dyno"> Dyno</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Carl-bot"> Carl-bot</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Wick"> Wick</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Audit Logs"> Audit Logs</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Safety Tools"> Safety Tools</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="None / New"> None / New to tools</label>
-          <label class="check-opt"><input type="checkbox" name="tools" value="Other"> Other</label>
-        </div>
-      </div>
-      <div class="field"><label>How do you handle conflict between two members? <span class="req">*</span></label>
-        <div class="field-hint" style="margin-bottom:6px">Walk us through your exact process from first notice to resolution. <strong>No experience?</strong> Describe how you <em>would</em> handle it.</div>
-        <textarea id="conflict" maxlength="600" placeholder="Be specific — step by step, from detection to outcome."></textarea>
-        <div class="char-count" id="ccConflict">0 / 600</div>
-      </div>
-      <div class="field"><label>Describe a specific moderation situation you've dealt with</label>
-        <div class="field-hint" style="margin-bottom:6px">Real incident preferred. <strong>No experience?</strong> Describe a hypothetical, or type <strong>N/A</strong>.</div>
-        <textarea id="situation" maxlength="700" placeholder="What happened, how you responded, and what the outcome was."></textarea>
-        <div class="char-count" id="ccSituation">0 / 700</div>
-      </div>
-    </div>
-
-    <!-- SECTION 3 -->
-    <div class="section" id="sec2">
-      <div class="divider">Scenario Questions</div>
-      <div class="field"><label>Scenario A — Rule Violation by a Friend <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">A close friend who's been in the server for years keeps making borderline offensive jokes in chat. Other members are complaining. How do you handle it?</p><textarea id="scenA" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccA">0 / 500</div></div>
-      <div class="field"><label>Scenario B — Disagreement with Another Mod <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">You think another moderator handled a situation incorrectly and was too harsh. What do you do?</p><textarea id="scenB" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccB">0 / 500</div></div>
-      <div class="field"><label>Scenario C — Raid in Progress <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">The server is being raided — dozens of new accounts spamming NSFW content across every channel. You're the only mod online. What are your immediate steps?</p><textarea id="scenC" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccC">0 / 500</div></div>
-      <div class="field"><label>Scenario D — Member Threatening Self-Harm <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">A member sends a message in a public channel implying they may hurt themselves. Other members are panicking. What is your response?</p><textarea id="scenD" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccD">0 / 500</div></div>
-      <div class="field"><label>Scenario E — False Report Against a Member <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">A user DMs you claiming another member has been harassing them. When you review the logs, you find no evidence and suspect the report may be fabricated. How do you proceed?</p><textarea id="scenE" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccE">0 / 500</div></div>
-      <div class="field"><label>Scenario F — Doxxing Attempt <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">A user posts another member's real name and location in a public channel. What do you do immediately, and what steps follow?</p><textarea id="scenF" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccF">0 / 500</div></div>
-      <div class="field"><label>Scenario G — Disagreement with a Rule <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">You personally disagree with one of the server rules and believe it is unfair. A member is currently breaking that rule. What do you do?</p><textarea id="scenG" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccG">0 / 500</div></div>
-      <div class="field"><label>Scenario H — Coordinated Spam Bot Infiltration <span class="req">*</span></label><p style="font-size:11px;color:var(--dim);line-height:1.7;margin-top:-8px">Several accounts that joined weeks ago have started mass-pinging members and posting phishing links simultaneously. They appear coordinated. What's your action plan?</p><textarea id="scenH" maxlength="500" placeholder="Your response..."></textarea><div class="char-count" id="ccH">0 / 500</div></div>
-      <div class="field"><label>Additional Skills or Qualifications</label><textarea id="skills" maxlength="400" placeholder="Any other skills? (graphic design, event planning, coding bots, other languages, mental health support, etc.)"></textarea><div class="char-count" id="ccSkills">0 / 400</div></div>
-    </div>
-
-    <!-- SECTION 4 -->
-    <div class="section" id="sec3">
-      <div class="bg-banner">
-        <svg class="ico" width="28" height="28" style="margin-top:2px;flex-shrink:0"><use href="#ic-search"/></svg>
-        <div style="flex:1">
-          <div class="bg-title">Background Check Notice <span class="hr-badge"><svg class="ico" width="12" height="12"><use href="#ic-hr"/></svg>HR</span></div>
-          <div class="bg-subtitle">Conducted by HR &amp; Senior Staff</div>
-          <div class="bg-text">All applicants are subject to a <strong style="color:var(--text)">comprehensive background review</strong>. This check spans <strong style="color:var(--text)">two scopes</strong>:</div>
-          <div class="bg-servers"><span class="bg-pill">This Server</span><span style="color:var(--muted);font-size:12px;align-self:center">+</span><span class="bg-pill">All Listed Servers</span></div>
-          <div class="bg-text">HR will contact the administration of every server you listed. Omitting a server is considered misrepresentation.</div>
-          <div class="bg-tags"><span class="bg-tag">Prior Bans</span><span class="bg-tag">Warnings / Kicks</span><span class="bg-tag">Affiliated Server History</span><span class="bg-tag">Past Toxicity Reports</span><span class="bg-tag">Alt Accounts</span><span class="bg-tag">Cross-Server Trust Score</span><span class="bg-tag">Invite Server Verification</span></div>
-        </div>
-      </div>
-      <div class="field"><label>Have you ever been banned from a Discord server? <span class="req">*</span></label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="banned" value="no"><div><div class="radio-opt-label">No — I have never been banned</div></div></label>
-          <label class="radio-opt"><input type="radio" name="banned" value="yes"><div><div class="radio-opt-label">Yes — I have been banned before</div><div class="radio-opt-desc">Selecting yes does not automatically disqualify you</div></div></label>
-        </div>
-      </div>
-      <div class="field"><label>If yes — explain the circumstances</label><textarea id="banExplain" maxlength="500" placeholder="Be fully honest. What server, what rule did you break, and what did you learn from it?"></textarea><div class="char-count" id="ccBan">0 / 500</div></div>
-      <div class="field"><label>Do you have any alternate Discord accounts? <span class="req">*</span></label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="alts" value="no"><div><div class="radio-opt-label">No — I only use one account</div></div></label>
-          <label class="radio-opt"><input type="radio" name="alts" value="yes"><div><div class="radio-opt-label">Yes — I have alt account(s)</div><div class="radio-opt-desc">You'll need to disclose all active alts</div></div></label>
-        </div>
-      </div>
-      <div class="field"><label>Any additional information for the review team?</label><textarea id="extra" maxlength="400" placeholder="Anything else we should know about your past, character, or situation that might be relevant."></textarea><div class="char-count" id="ccExtra">0 / 400</div></div>
-      <label class="agree-row">
-        <input type="checkbox" id="agreeBox">
-        <div class="agree-text">I confirm that all information provided is <strong>truthful and accurate</strong>, including all server invite links and listed communities. I understand that misrepresentation of any kind — including omitting servers — will result in immediate disqualification and a permanent ban. I consent to a <strong>background check</strong> being performed by the HR team and senior staff across this server and all servers I have listed.</div>
-      </label>
-    </div>
+    <!-- Sections built by JS -->
+    <div id="formSections"></div>
 
     <!-- SUCCESS -->
     <div id="success">
@@ -466,24 +310,31 @@
 </div>
 
 <script>
-(function() {
-  const p    = new URLSearchParams(window.location.search);
+// ── INIT ──────────────────────────────────────────────────────
+let sessionUser = null;
+let sessionId   = null;
+
+(function(){
+  const p    = new URLSearchParams(location.search);
   const auth = p.get('auth');
   const user = p.get('user');
   const uid  = p.get('id');
   const av   = p.get('avatar');
-  window.history.replaceState({}, '', window.location.pathname);
-  const hideGate = () => document.getElementById('screenAuth').classList.remove('show');
+  history.replaceState({}, '', location.pathname);
+
+  const hide = () => document.getElementById('screenAuth').classList.remove('show');
+
   if (auth === 'success') {
-    hideGate();
+    hide();
+    sessionUser = user || 'Member';
+    sessionId   = uid  || '';
     document.getElementById('mainApp').classList.add('show');
     document.getElementById('userPill').classList.add('show');
-    document.getElementById('pillName').textContent  = user || 'Member';
-    document.getElementById('pillAvatar').src        = av   || '';
-    if (uid)  document.getElementById('userid').value   = uid;
-    if (user) document.getElementById('username').value = user;
+    document.getElementById('pillName').textContent = sessionUser;
+    document.getElementById('pillAvatar').src       = av || '';
+    buildForm();
   } else if (auth === 'no_role') {
-    hideGate();
+    hide();
     document.getElementById('screenDenied').classList.add('show');
     if (user && av) {
       document.getElementById('deniedUserRow').style.display = 'flex';
@@ -491,22 +342,215 @@
       document.getElementById('deniedAvatar').src            = av;
     }
   } else if (auth === 'not_in_server') {
-    hideGate(); document.getElementById('screenNoServer').classList.add('show');
+    hide(); document.getElementById('screenNoServer').classList.add('show');
   } else if (auth === 'error') {
-    hideGate(); document.getElementById('screenError').classList.add('show');
+    hide(); document.getElementById('screenError').classList.add('show');
   } else if (auth === 'denied') {
     document.getElementById('screenAuth').querySelector('.auth-sub').textContent = 'Sign-in was cancelled. Click below to try again.';
   }
 })();
 
-let cur = 0;
-const TOTAL = 4;
-const HEADS = [
-  { title:'Your Profile',          sub:'Basic identity & Discord info',        icon:'#ic-person' },
-  { title:'Moderation Experience', sub:"Tell us what you've done before",       icon:'#ic-star'   },
-  { title:'Scenario Questions',    sub:'How would you handle real situations?', icon:'#ic-bolt'   },
-  { title:'Background & Consent', sub:'Review & background check disclosure',  icon:'#ic-search' },
+// ── FORM BUILDER ─────────────────────────────────────────────
+const STEPS = [
+  { title:'Your Profile',           sub:'Basic identity & Discord info',        icon:'#ic-person' },
+  { title:'Moderation Experience',  sub:"Tell us what you've done before",       icon:'#ic-star'   },
+  { title:'Custom Questions',       sub:'Answer all required questions',         icon:'#ic-bolt'   },
+  { title:'Background & Consent',   sub:'Review & background check disclosure',  icon:'#ic-search' },
 ];
+
+let cur         = 0;
+let questions   = [];
+let formAnswers = {};
+
+async function buildForm() {
+  try {
+    questions = await fetch('/api/questions').then(r => r.json());
+  } catch { questions = []; }
+
+  buildProgressBar();
+  buildSections();
+  syncUI();
+  setupCharCounters();
+}
+
+function buildProgressBar() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = STEPS.map((s, i) => `
+    <div class="step ${i===0?'active':''}" id="s${i}">
+      <div class="step-dot">${i+1}</div>
+      <div class="step-label">${s.title.split(' ')[0]}</div>
+    </div>
+    ${i < STEPS.length-1 ? `<div class="step-line" id="l${i}"></div>` : ''}
+  `).join('');
+}
+
+function buildSections() {
+  const container = document.getElementById('formSections');
+
+  // SECTION 0 — Profile (fixed)
+  container.innerHTML += `
+  <div class="section active" id="sec0">
+    <div class="field-row">
+      <div class="field">
+        <label>Discord Username <span class="req">*</span><span class="tip">Locked from login</span></label>
+        <input type="text" id="f_username" value="${escHtml(sessionUser)}" readonly>
+      </div>
+      <div class="field">
+        <label>Discord User ID <span class="req">*</span><span class="tip">Auto-filled</span></label>
+        <input type="text" id="f_userid" value="${escHtml(sessionId)}" readonly>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Age <span class="req">*</span></label>
+        <input type="number" id="f_age" placeholder="Must be 14+" min="14" max="99">
+      </div>
+      <div class="field">
+        <label>Timezone <span class="req">*</span></label>
+        <select id="f_tz">
+          <option value="">— Select —</option>
+          <option>UTC-12 (Baker Island)</option><option>UTC-8 (PST)</option><option>UTC-7 (MST)</option>
+          <option>UTC-6 (CST)</option><option>UTC-5 (EST)</option><option>UTC-4 (AST)</option>
+          <option>UTC-3 (BRT)</option><option>UTC+0 (GMT/UTC)</option><option>UTC+1 (CET)</option>
+          <option>UTC+2 (EET)</option><option>UTC+3 (MSK)</option><option>UTC+5:30 (IST)</option>
+          <option>UTC+7 (ICT)</option><option>UTC+8 (CST/SGT)</option><option>UTC+9 (JST)</option>
+          <option>UTC+10 (AEST)</option><option>UTC+12 (NZST)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Average Daily Availability <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="avail" value="lt1"><div><div class="radio-opt-label">Less than 1 hour/day</div><div class="radio-opt-desc">Very limited — may not be sufficient for staff duties</div></div></label>
+        <label class="radio-opt"><input type="radio" name="avail" value="1to3"><div><div class="radio-opt-label">1–3 hours/day</div><div class="radio-opt-desc">Part-time — suitable for off-peak coverage</div></div></label>
+        <label class="radio-opt"><input type="radio" name="avail" value="3to6"><div><div class="radio-opt-label">3–6 hours/day</div><div class="radio-opt-desc">Good commitment level</div></div></label>
+        <label class="radio-opt"><input type="radio" name="avail" value="6plus"><div><div class="radio-opt-label">6+ hours/day</div><div class="radio-opt-desc">High availability — strong candidate</div></div></label>
+      </div>
+    </div>
+  </div>`;
+
+  // SECTION 1 — Experience (fixed)
+  container.innerHTML += `
+  <div class="section" id="sec1">
+    <div class="field">
+      <label>Have you moderated a Discord server before? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="modExp" value="yes"><div><div class="radio-opt-label">Yes — I have prior experience</div></div></label>
+        <label class="radio-opt"><input type="radio" name="modExp" value="no"><div><div class="radio-opt-label">No — this would be my first time</div></div></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Moderation tools you've used <span class="req">*</span></label>
+      <div class="check-grid">
+        <label class="check-opt"><input type="checkbox" name="tools" value="MEE6"> MEE6</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Dyno"> Dyno</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Carl-bot"> Carl-bot</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Wick"> Wick</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Audit Logs"> Audit Logs</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Safety Tools"> Safety Tools</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="None / New"> None / New</label>
+        <label class="check-opt"><input type="checkbox" name="tools" value="Other"> Other</label>
+      </div>
+    </div>
+  </div>`;
+
+  // SECTION 2 — Custom Questions (from API)
+  let sec2html = `<div class="section" id="sec2">`;
+  if (questions.length === 0) {
+    sec2html += `<div style="font-size:12px;color:var(--muted);text-align:center;padding:24px">No custom questions have been configured by admin yet.</div>`;
+  } else {
+    questions.forEach((q, i) => {
+      const reqStar = q.required ? `<span class="req">*</span>` : '';
+      sec2html += `<div class="field">`;
+      if (q.type === 'scenario') {
+        sec2html += `<label>${escHtml(q.label)} ${reqStar}</label>`;
+        sec2html += `<p class="scenario-desc">${escHtml(q.body || '')}</p>`;
+        sec2html += `<textarea id="q_${q.id}" maxlength="${q.maxLen || 500}" placeholder="Your response…"></textarea>`;
+        sec2html += `<div class="char-count" id="cc_${q.id}">0 / ${q.maxLen || 500}</div>`;
+      } else {
+        sec2html += `<label>${escHtml(q.label)} ${reqStar}</label>`;
+        if (q.hint) sec2html += `<div class="field-hint">${escHtml(q.hint)}</div>`;
+        sec2html += `<textarea id="q_${q.id}" maxlength="${q.maxLen || 600}" placeholder="${escHtml(q.placeholder || '')}"></textarea>`;
+        sec2html += `<div class="char-count" id="cc_${q.id}">0 / ${q.maxLen || 600}</div>`;
+      }
+      sec2html += `</div>`;
+    });
+  }
+  sec2html += `</div>`;
+  container.innerHTML += sec2html;
+
+  // SECTION 3 — Background (fixed / locked)
+  container.innerHTML += `
+  <div class="section" id="sec3">
+    <div class="bg-banner">
+      <svg class="ico" width="28" height="28" style="margin-top:2px;flex-shrink:0"><use href="#ic-search"/></svg>
+      <div style="flex:1">
+        <div class="bg-title">Background Check Notice <span class="hr-badge">HR</span></div>
+        <div class="bg-subtitle">Conducted by HR &amp; Senior Staff</div>
+        <div class="bg-text">All applicants are subject to a <strong style="color:var(--text)">comprehensive background review</strong> spanning two scopes:</div>
+        <div class="bg-servers"><span class="bg-pill">This Server</span><span style="color:var(--muted);font-size:12px;align-self:center">+</span><span class="bg-pill">All Listed Servers</span></div>
+        <div class="bg-text">HR will contact the administration of every server you listed.</div>
+        <div class="bg-tags"><span class="bg-tag">Prior Bans</span><span class="bg-tag">Warnings / Kicks</span><span class="bg-tag">Affiliated History</span><span class="bg-tag">Past Toxicity</span><span class="bg-tag">Alt Accounts</span></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Have you ever been banned from a Discord server? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="banned" value="no"><div><div class="radio-opt-label">No — I have never been banned</div></div></label>
+        <label class="radio-opt"><input type="radio" name="banned" value="yes"><div><div class="radio-opt-label">Yes — I have been banned before</div><div class="radio-opt-desc">Selecting yes does not automatically disqualify you</div></div></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>If yes — explain the circumstances</label>
+      <textarea id="f_banExplain" maxlength="500" placeholder="What server, what rule, what you learned."></textarea>
+      <div class="char-count" id="cc_banExplain">0 / 500</div>
+    </div>
+    <div class="field">
+      <label>Do you have any alternate Discord accounts? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="alts" value="no"><div><div class="radio-opt-label">No — I only use one account</div></div></label>
+        <label class="radio-opt"><input type="radio" name="alts" value="yes"><div><div class="radio-opt-label">Yes — I have alt account(s)</div></div></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Any additional information for the review team?</label>
+      <textarea id="f_extra" maxlength="400" placeholder="Anything else relevant to your application."></textarea>
+      <div class="char-count" id="cc_extra">0 / 400</div>
+    </div>
+    <label class="agree-row">
+      <input type="checkbox" id="agreeBox">
+      <div class="agree-text">I confirm that all information provided is <strong>truthful and accurate</strong>. I understand that misrepresentation will result in immediate disqualification and a permanent ban. I consent to a <strong>background check</strong> by the HR team and senior staff.</div>
+    </label>
+  </div>`;
+}
+
+function setupCharCounters() {
+  // Dynamic question counters
+  questions.forEach(q => {
+    const t = document.getElementById(`q_${q.id}`);
+    const c = document.getElementById(`cc_${q.id}`);
+    if (!t || !c) return;
+    const max = q.maxLen || 500;
+    t.addEventListener('input', () => {
+      const n = t.value.length;
+      c.textContent = `${n} / ${max}`;
+      c.className = 'char-count' + (n >= max ? ' over' : n > max * .9 ? ' warn' : '');
+    });
+  });
+  // Fixed counters
+  [['f_banExplain', 500, 'cc_banExplain'], ['f_extra', 400, 'cc_extra']].forEach(([id, max, cc]) => {
+    const t = document.getElementById(id), c = document.getElementById(cc);
+    if (!t || !c) return;
+    t.addEventListener('input', () => {
+      const n = t.value.length;
+      c.textContent = `${n} / ${max}`;
+      c.className = 'char-count' + (n >= max ? ' over' : n > max * .9 ? ' warn' : '');
+    });
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+const TOTAL = 4;
 
 function navigate(dir) {
   if (dir === 1 && !validate(cur)) return;
@@ -516,24 +560,26 @@ function navigate(dir) {
   document.getElementById(`sec${prev}`).classList.remove('active');
   document.getElementById(`sec${cur}`).classList.add('active');
   syncUI();
-  window.scrollTo({ top:0, behavior:'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function syncUI() {
-  const h = HEADS[cur];
+  const h = STEPS[cur];
   document.getElementById('cardTitle').textContent  = h.title;
   document.getElementById('cardSub').textContent    = h.sub;
-  document.getElementById('stepPill').textContent   = `Step ${cur+1} of ${TOTAL}`;
+  document.getElementById('stepPill').textContent   = `Step ${cur + 1} of ${TOTAL}`;
   document.getElementById('cardIconWrap').innerHTML = `<svg width="18" height="18"><use href="${h.icon}"/></svg>`;
   document.getElementById('btnBack').style.visibility = cur === 0 ? 'hidden' : 'visible';
   const btn = document.getElementById('btnNext');
-  btn.textContent = cur === TOTAL-1 ? '✓ Submit Application' : 'Next →';
-  btn.className   = 'btn ' + (cur === TOTAL-1 ? 'btn-submit' : 'btn-next');
+  btn.textContent = cur === TOTAL - 1 ? '✓ Submit Application' : 'Next →';
+  btn.className   = 'btn ' + (cur === TOTAL - 1 ? 'btn-submit' : 'btn-next');
   for (let i = 0; i < TOTAL; i++) {
     const s = document.getElementById(`s${i}`);
+    if (!s) continue;
     s.className = 'step' + (i < cur ? ' done' : i === cur ? ' active' : '');
-    s.querySelector('.step-dot').textContent = i < cur ? '✓' : i+1;
-    if (i < TOTAL-1) document.getElementById(`l${i}`).className = 'step-line' + (i < cur ? ' done' : '');
+    s.querySelector('.step-dot').textContent = i < cur ? '✓' : i + 1;
+    const l = document.getElementById(`l${i}`);
+    if (l) l.className = 'step-line' + (i < cur ? ' done' : '');
   }
 }
 
@@ -543,104 +589,88 @@ function validate(step) {
     const el = document.getElementById(id);
     if (!el || el.value.trim()) return true;
     el.classList.add('error');
-    el.scrollIntoView({ behavior:'smooth', block:'center' });
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => el.classList.remove('error'), 2000);
     return ok = false;
   };
-  if (step === 0) { req('username'); req('age'); req('timezone'); req('why'); if (!document.querySelector('input[name="avail"]:checked')) ok = false; }
-  if (step === 1) { req('serverInvites'); req('conflict'); if (!document.querySelector('input[name="modExp"]:checked')) ok = false; }
-  if (step === 2) { ['scenA','scenB','scenC','scenD','scenE','scenF','scenG','scenH'].forEach(req); }
-  if (step === 3) { if (!document.querySelector('input[name="banned"]:checked')) ok=false; if (!document.querySelector('input[name="alts"]:checked')) ok=false; if (!document.getElementById('agreeBox').checked) ok=false; }
+  if (step === 0) { req('f_age'); req('f_tz'); if (!document.querySelector('input[name="avail"]:checked')) ok = false; }
+  if (step === 1) { if (!document.querySelector('input[name="modExp"]:checked')) ok = false; }
+  if (step === 2) {
+    questions.filter(q => q.required).forEach(q => {
+      const el = document.getElementById(`q_${q.id}`);
+      if (el && !el.value.trim()) { el.classList.add('error'); el.scrollIntoView({ behavior:'smooth', block:'center' }); setTimeout(() => el.classList.remove('error'), 2000); ok = false; }
+    });
+  }
+  if (step === 3) {
+    if (!document.querySelector('input[name="banned"]:checked')) ok = false;
+    if (!document.querySelector('input[name="alts"]:checked'))   ok = false;
+    if (!document.getElementById('agreeBox').checked)            ok = false;
+  }
   return ok;
 }
 
+// ── SUBMIT ────────────────────────────────────────────────────
 async function submitApp() {
-  const appId       = 'NODE-' + Math.random().toString(36).substr(2,9).toUpperCase();
-  const submittedAt = new Date().toLocaleString('en-US', { dateStyle:'full', timeStyle:'short' });
-  const val    = id   => document.getElementById(id)?.value.trim() || 'Not provided';
-  const radio  = name => document.querySelector(`input[name="${name}"]:checked`)?.value || 'Not answered';
-  const checks = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ') || 'None selected';
-  const yn     = v    => v === 'yes' ? '✅  YES' : v === 'no' ? '❌  NO' : 'Not answered';
-  const avMap  = { lt1:'Less than 1 hour/day', '1to3':'1–3 hours/day', '3to6':'3–6 hours/day', '6plus':'6+ hours/day' };
-  const cut    = (s, n=1024) => (s||'Not provided').substring(0,n);
+  const appId       = 'NODE-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+  const submittedAt = new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+
+  const val   = id => document.getElementById(id)?.value.trim() || 'Not provided';
+  const radio = n  => document.querySelector(`input[name="${n}"]:checked`)?.value || 'Not answered';
+  const checks= n  => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(e => e.value).join(', ') || 'None';
+  const avMap = { lt1: 'Less than 1 hour/day', '1to3': '1–3 hours/day', '3to6': '3–6 hours/day', '6plus': '6+ hours/day' };
+  const cut   = (s, n=1024) => (s || 'Not provided').substring(0, n);
+
+  // Build custom question fields for embed
+  const customFields = questions.map(q => ({
+    name:  q.label.substring(0, 256),
+    value: cut(document.getElementById(`q_${q.id}`)?.value.trim() || 'Not provided'),
+  }));
 
   const payload = {
     username:   'Node — Staff Applications',
     avatar_url: 'https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128',
     content:    `📋 **NEW STAFF APPLICATION — NODE**\n> ID: \`${appId}\`  •  ${submittedAt}`,
     embeds: [
-      { title:'👤  SECTION 1 — APPLICANT PROFILE', color:0xffffff, fields:[
-        { name:'Discord Username',   value:cut(val('username')), inline:true },
-        { name:'Discord User ID',    value:cut(val('userid')),   inline:true },
-        { name:'Age',                value:cut(val('age')),      inline:true },
-        { name:'Timezone',           value:cut(val('timezone')), inline:true },
-        { name:'Daily Availability', value:avMap[radio('avail')]||radio('avail'), inline:true },
-        { name:'\u200b',             value:'\u200b',             inline:true },
-        { name:'💬  Motivation', value:cut(val('why')) },
+      { title: '👤  SECTION 1 — APPLICANT PROFILE', color: 0xffffff, fields: [
+        { name: 'Discord Username',    value: cut(val('f_username')), inline: true },
+        { name: 'Discord User ID',     value: cut(val('f_userid')),   inline: true },
+        { name: 'Age',                 value: cut(val('f_age')),      inline: true },
+        { name: 'Timezone',            value: cut(val('f_tz')),       inline: true },
+        { name: 'Daily Availability',  value: avMap[radio('avail')] || radio('avail'), inline: true },
+        { name: '\u200b',              value: '\u200b', inline: true },
       ]},
-      { title:'⭐  SECTION 2 — MODERATION EXPERIENCE', color:0xcccccc, fields:[
-        { name:'Prior Mod Experience', value:yn(radio('modExp')),  inline:true },
-        { name:'Tools Used',           value:cut(checks('tools')), inline:true },
-        { name:'🔗  Current Server Invites  ⚠️ HR Verification Required', value:cut(val('serverInvites')) },
-        { name:'📂  Previous Servers & Roles',    value:cut(val('prevServers')) },
-        { name:'⚖️  Conflict Resolution Process', value:cut(val('conflict'))    },
-        { name:'📌  Past Moderation Situation',   value:cut(val('situation'))   },
+      { title: '⭐  SECTION 2 — EXPERIENCE', color: 0xcccccc, fields: [
+        { name: 'Prior Mod Experience', value: radio('modExp') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
+        { name: 'Tools Used',           value: cut(checks('tools')), inline: true },
       ]},
-      { title:'⚡  SECTION 3 — SCENARIOS (A – D)', color:0x888888, fields:[
-        { name:'A — Rule Violation by a Friend',    value:cut(val('scenA')) },
-        { name:'B — Disagreement with Another Mod', value:cut(val('scenB')) },
-        { name:'C — Raid in Progress',              value:cut(val('scenC')) },
-        { name:'D — Member Threatening Self-Harm',  value:cut(val('scenD')) },
-      ]},
-      { title:'⚡  SECTION 3 — SCENARIOS (E – H)', color:0x555555, fields:[
-        { name:'E — False Report Against a Member',     value:cut(val('scenE')) },
-        { name:'F — Doxxing Attempt',                   value:cut(val('scenF')) },
-        { name:'G — Disagreement with a Rule',          value:cut(val('scenG')) },
-        { name:'H — Coordinated Spam Bot Infiltration', value:cut(val('scenH')) },
-        { name:'🎯  Additional Skills',                 value:cut(val('skills')) },
-      ]},
-      { title:'🔍  SECTION 4 — BACKGROUND & CONSENT', color:0x333333, fields:[
-        { name:'Ever Been Banned?', value:yn(radio('banned')), inline:true },
-        { name:'Has Alt Accounts?', value:yn(radio('alts')),   inline:true },
-        { name:'\u200b',            value:'\u200b',            inline:true },
-        { name:'📝  Ban Explanation',                 value:cut(val('banExplain')) },
-        { name:'📋  Additional Info for Review Team', value:cut(val('extra'))      },
-        { name:'✅  Consent to Background Check',     value:'CONFIRMED — Applicant agreed to a full background review.' },
-      ], footer:{ text:`Application ID: ${appId}  •  Node Staff Portal — Confidential` }, timestamp:new Date().toISOString() },
+      { title: '⚡  SECTION 3 — CUSTOM QUESTIONS', color: 0x888888, fields: customFields.length ? customFields : [{ name: 'No questions', value: 'No custom questions configured.' }] },
+      { title: '🔍  SECTION 4 — BACKGROUND & CONSENT', color: 0x333333, fields: [
+        { name: 'Ever Banned?', value: radio('banned') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
+        { name: 'Has Alts?',    value: radio('alts')   === 'yes' ? '✅ YES' : '❌ NO', inline: true },
+        { name: '\u200b',       value: '\u200b', inline: true },
+        { name: '📝 Ban Explanation',  value: cut(val('f_banExplain')) },
+        { name: '📋 Additional Info',  value: cut(val('f_extra')) },
+        { name: '✅ Background Check Consent', value: 'CONFIRMED' },
+      ], footer: { text: `Application ID: ${appId}  •  Node Staff Portal` }, timestamp: new Date().toISOString() },
     ],
   };
 
   const btn = document.getElementById('btnNext');
   btn.disabled = true; btn.textContent = 'Submitting…';
-  try { await fetch('/submit', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); }
-  catch(e) { console.warn('Submit error:', e); }
+
+  try { await fetch('/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
+  catch (e) { console.warn('Submit error:', e); }
 
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('success').style.display     = 'flex';
   document.getElementById('navRow').style.display      = 'none';
   document.getElementById('progressBar').style.display = 'none';
-  for (let i = 0; i < TOTAL; i++) {
-    document.getElementById(`s${i}`).className = 'step done';
-    document.getElementById(`s${i}`).querySelector('.step-dot').textContent = '✓';
-    if (i < TOTAL-1) document.getElementById(`l${i}`).className = 'step-line done';
-  }
-  document.getElementById('appId').textContent = appId;
+  document.getElementById('appId').textContent         = appId;
 }
 
-[['why',600,'ccWhy'],['serverInvites',800,'ccInvites'],['prevServers',700,'ccPrev'],
- ['conflict',600,'ccConflict'],['situation',700,'ccSituation'],
- ['scenA',500,'ccA'],['scenB',500,'ccB'],['scenC',500,'ccC'],['scenD',500,'ccD'],
- ['scenE',500,'ccE'],['scenF',500,'ccF'],['scenG',500,'ccG'],['scenH',500,'ccH'],
- ['skills',400,'ccSkills'],['banExplain',500,'ccBan'],['extra',400,'ccExtra'],
-].forEach(([id,max,cc]) => {
-  const t = document.getElementById(id), c = document.getElementById(cc);
-  if (!t||!c) return;
-  t.addEventListener('input', () => {
-    const n = t.value.length;
-    c.textContent = `${n} / ${max}`;
-    c.className   = 'char-count' + (n >= max ? ' over' : n > max*.9 ? ' warn' : '');
-  });
-});
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
