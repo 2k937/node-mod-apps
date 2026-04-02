@@ -204,6 +204,77 @@ app.post("/api/questions/reset", adminMW, async (_req, res) => {
 });
 
 // ═══════════════════════════════════════════
+//  API — APPLICATION TYPES
+// ═══════════════════════════════════════════
+app.get("/api/apptypes", async (_req, res) => {
+  try {
+    const doc = await col("config").findOne({ _id: "apptypes" });
+    res.json(doc ? doc.types : []);
+  } catch { res.json([]); }
+});
+
+app.post("/api/apptypes", adminMW, async (req, res) => {
+  try {
+    const { name, desc, open, icon } = req.body;
+    if (!name?.trim()) return res.status(400).json({ error: "Name required" });
+    const id   = "apptype_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const type = { id, name: name.trim(), desc: desc?.trim() || "", open: open !== false, icon: icon?.trim() || "📋" };
+    await col("config").updateOne({ _id: "apptypes" }, { $push: { types: type } }, { upsert: true });
+    res.json({ ok: true, id });
+  } catch { res.status(500).json({ error: "DB error" }); }
+});
+
+app.patch("/api/apptypes/:id", adminMW, async (req, res) => {
+  try {
+    const { name, desc, open, icon } = req.body;
+    await col("config").updateOne(
+      { _id: "apptypes", "types.id": req.params.id },
+      { $set: { "types.$.name": name, "types.$.desc": desc ?? "", "types.$.open": open !== false, "types.$.icon": icon || "📋" } }
+    );
+    res.json({ ok: true });
+  } catch { res.status(500).json({ error: "DB error" }); }
+});
+
+app.delete("/api/apptypes/:id", adminMW, async (req, res) => {
+  try {
+    await col("config").updateOne({ _id: "apptypes" }, { $pull: { types: { id: req.params.id } } });
+    await col("config").deleteOne({ _id: `questions_${req.params.id}` });
+    res.json({ ok: true });
+  } catch { res.status(500).json({ error: "DB error" }); }
+});
+
+// ═══════════════════════════════════════════
+//  API — PER-TYPE QUESTIONS
+// ═══════════════════════════════════════════
+app.get("/api/questions/:typeId", async (req, res) => {
+  try {
+    const doc = await col("config").findOne({ _id: `questions_${req.params.typeId}` });
+    if (doc) return res.json(doc.questions);
+    const legacy = await col("config").findOne({ _id: "questions" });
+    res.json(legacy ? legacy.questions : DEFAULT_QUESTIONS);
+  } catch { res.json(DEFAULT_QUESTIONS); }
+});
+
+app.put("/api/questions/:typeId", adminMW, async (req, res) => {
+  try {
+    if (!Array.isArray(req.body)) return res.status(400).json({ error: "Expected array" });
+    await col("config").replaceOne(
+      { _id: `questions_${req.params.typeId}` },
+      { _id: `questions_${req.params.typeId}`, questions: req.body },
+      { upsert: true }
+    );
+    res.json({ ok: true });
+  } catch { res.status(500).json({ error: "DB error" }); }
+});
+
+app.post("/api/questions/:typeId/reset", adminMW, async (req, res) => {
+  try {
+    await col("config").deleteOne({ _id: `questions_${req.params.typeId}` });
+    res.json({ ok: true, questions: DEFAULT_QUESTIONS });
+  } catch { res.status(500).json({ error: "DB error" }); }
+});
+
+// ═══════════════════════════════════════════
 //  API — APPLICATIONS
 // ═══════════════════════════════════════════
 app.get("/api/applications", adminMW, async (_req, res) => {
@@ -244,17 +315,19 @@ app.post("/submit", async (req, res) => {
     const s   = getSession(req);
     const doc = {
       ...req.body,
-      _submittedAt: new Date(),
-      _submittedBy: s?.userId   || "unknown",
-      _displayName: s?.username || "Unknown",
-      _avatar:      s?.avatar   || "",
-      _discordId:   s?.discordId || "",
-      _appId:       req.body.content?.match(/NODE-[A-Z0-9]+/)?.[0] || "NODE-" + Math.random().toString(36).slice(2,11).toUpperCase(),
-      _status:      "pending",
-      _manual:      false,
+      _submittedAt:  new Date(),
+      _submittedBy:  s?.userId    || "unknown",
+      _displayName:  s?.username  || "Unknown",
+      _avatar:       s?.avatar    || "",
+      _discordId:    s?.discordId || "",
+      _appId:        req.body.content?.match(/NODE-[A-Z0-9]+/)?.[0] || "NODE-" + Math.random().toString(36).slice(2,11).toUpperCase(),
+      _appTypeId:    req.body._appTypeId   || null,
+      _appTypeName:  req.body._appTypeName || "General",
+      _status:       "pending",
+      _manual:       false,
     };
     await col("applications").insertOne(doc);
-    await fetch(C.WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req.body) });
+    if (C.WEBHOOK_URL) await fetch(C.WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req.body) });
     res.json({ ok: true });
   } catch (e) { console.error("Submit error:", e); res.status(500).json({ ok: false }); }
 });
@@ -262,34 +335,26 @@ app.post("/submit", async (req, res) => {
 // ═══════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════
-async function exchangeCode(code, redirectUri) {
-  const r = await fetch(`${DISCORD_API}/oauth2/token`, {
-    method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ client_id: C.CLIENT_ID, client_secret: C.CLIENT_SECRET, grant_type: "authorization_code", code, redirect_uri: redirectUri }),
-  });
-  const d = await r.json();
-  if (!d.access_token) { console.error("Token exchange failed:", d); return null; }
-  return d.access_token;
+async function exchangeCode(code, redirect_uri) {
+  const resp = await fetch(`${DISCORD_API}/oauth2/token`, { method: "POST", body: new URLSearchParams({
+    client_id: C.CLIENT_ID,
+    client_secret: C.CLIENT_SECRET,
+    grant_type: "authorization_code",
+    code,
+    redirect_uri,
+  }), headers: { "Content-Type":"application/x-www-form-urlencoded" } });
+  if (!resp.ok) return null;
+  const data = await resp.json();
+  return data.access_token;
 }
-async function discordGet(token, endpoint, nullOn404 = false) {
+async function discordGet(token, endpoint, json = true) {
   const r = await fetch(`${DISCORD_API}${endpoint}`, { headers: { Authorization: `Bearer ${token}` } });
-  if (nullOn404 && !r.ok) return null;
-  return r.json();
+  return json ? r.json() : r;
 }
-function avatarUrl(user) {
-  return user.avatar
-    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-    : `https://cdn.discordapp.com/embed/avatars/${(BigInt(user.id) >> 22n) % 6n}.png`;
-}
-const enc = encodeURIComponent;
+function avatarUrl(user) { return user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256` : ""; }
+function enc(s) { return encodeURIComponent(s); }
 
 // ═══════════════════════════════════════════
-//  START
+//  START SERVER
 // ═══════════════════════════════════════════
-connectDB().then(() => {
-  app.listen(C.PORT, "0.0.0.0", () => {
-    console.log(`\n✅  Server → http://localhost:${C.PORT}`);
-    console.log(`🔗  Redirect URI:       ${C.REDIRECT_URI}`);
-    console.log(`🔗  Admin Redirect URI: ${adminRedirect()}\n`);
-  });
-}).catch(e => { console.error("❌  MongoDB failed:", e.message); process.exit(1); });
+connectDB().then(() => app.listen(C.PORT, () => console.log(`🚀 Server running on port ${C.PORT}`)));
