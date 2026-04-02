@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node — Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090f;--surface:#0e1018;--sur2:#13161f;--sur3:#181b26;--border:#1e2130;--border2:#252940;--accent:#5865F2;--ac2:#7289da;--green:#57f287;--red:#ed4245;--yellow:#fee75c;--text:#dde1f5;--muted:#4a5070;--dim:#7a80a0}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Space Mono',monospace;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(88,101,242,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(88,101,242,.022) 1px,transparent 1px);background-size:40px 40px}
+
+/* TOPBAR */
+.topbar{position:relative;z-index:10;background:var(--surface);border-bottom:1px solid var(--border2);padding:0 20px;display:flex;align-items:center;gap:14px;height:54px;flex-shrink:0}
+.tb-logo{display:flex;align-items:center;gap:9px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px}
+.tb-sep{width:1px;height:20px;background:var(--border2)}
+.tb-tag{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.staff-pill{display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--border2);border-radius:40px;padding:4px 12px 4px 4px}
+.staff-avatar{width:26px;height:26px;border-radius:50%;border:2px solid var(--accent)}
+.staff-name{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.staff-badge{font-size:9px;color:var(--ac2);letter-spacing:1px;text-transform:uppercase}
+.tb-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);color:var(--dim);border-radius:7px;padding:5px 12px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.tb-btn:hover{border-color:var(--ac2);color:var(--ac2)}
+.tb-btn.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden;position:relative;z-index:1}
+.sidebar{width:210px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;overflow-y:auto}
+.nav-sec{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#1e2240;padding:14px 18px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.nav-item:hover{color:var(--text);background:rgba(88,101,242,.05)}
+.nav-item.active{color:var(--ac2);background:rgba(88,101,242,.08);border-left-color:var(--accent)}
+.nav-item .nc{margin-left:auto;background:rgba(88,101,242,.2);border:1px solid rgba(88,101,242,.3);border-radius:10px;padding:1px 7px;font-size:10px;color:var(--ac2)}
+.sidebar-foot{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);font-size:10px;color:#1e2240;line-height:1.7}
+.main{flex:1;overflow-y:auto;padding:24px}
+
+/* PANELS */
+.panel{display:none;animation:fadeUp .2s ease both}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* PAGE HEAD */
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
+.page-head h2{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff}
+.page-head p{font-size:11px;color:var(--muted);margin-top:2px}
+.head-acts{display:flex;gap:8px;flex-shrink:0}
+
+/* BUTTONS */
+.btn{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;border:none;border-radius:7px;padding:8px 16px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 3px 12px rgba(88,101,242,.3)}
+.btn-primary:hover{background:#6b78f5;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--dim)}
+.btn-ghost:hover{border-color:var(--ac2);color:var(--ac2)}
+.btn-green{background:rgba(87,242,135,.12);border:1px solid rgba(87,242,135,.3);color:var(--green)}
+.btn-green:hover{background:rgba(87,242,135,.22)}
+.btn-red{background:rgba(237,66,69,.1);border:1px solid rgba(237,66,69,.3);color:var(--red)}
+.btn-red:hover{background:rgba(237,66,69,.2)}
+.btn-yellow{background:rgba(254,231,92,.1);border:1px solid rgba(254,231,92,.3);color:var(--yellow)}
+.btn-yellow:hover{background:rgba(254,231,92,.2)}
+.btn-sm{font-size:11px;padding:5px 11px}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.sc-blue::after{background:linear-gradient(90deg,var(--accent),transparent)}
+.sc-green::after{background:linear-gradient(90deg,var(--green),transparent)}
+.sc-yellow::after{background:linear-gradient(90deg,var(--yellow),transparent)}
+.sc-red::after{background:linear-gradient(90deg,var(--red),transparent)}
+.stat-label{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.stat-val{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;line-height:1}
+.sc-blue .stat-val{color:var(--ac2)}
+.sc-green .stat-val{color:var(--green)}
+.sc-yellow .stat-val{color:var(--yellow)}
+.sc-red .stat-val{color:var(--red)}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* TABLE */
+.table-wrap{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
+.table-toolbar{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--sur2);flex-wrap:wrap}
+.search-box{background:var(--sur3);border:1px solid var(--border2);border-radius:7px;padding:7px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;outline:none;width:200px;transition:border-color .2s}
+.search-box:focus{border-color:var(--accent)}
+.search-box::placeholder{color:#252840}
+.filter-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;background:var(--sur3);border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:5px 11px;cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{border-color:var(--ac2);color:var(--ac2);background:rgba(88,101,242,.07)}
+.count-lbl{margin-left:auto;font-size:10px;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);background:var(--sur2)}
+td{padding:12px 16px;font-size:11px;border-bottom:1px solid rgba(30,33,48,.5);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(88,101,242,.025)}
+.ucell{display:flex;align-items:center;gap:9px}
+.uav{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--sur2);flex-shrink:0}
+.uname{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.uid{font-size:10px;color:var(--muted);margin-top:1px}
+.appid-cell{font-size:10px;color:var(--ac2);font-family:'Space Mono',monospace}
+.sp{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 9px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700}
+.sp-p{background:rgba(254,231,92,.08);border:1px solid rgba(254,231,92,.2);color:var(--yellow)}
+.sp-a{background:rgba(87,242,135,.08);border:1px solid rgba(87,242,135,.2);color:var(--green)}
+.sp-d{background:rgba(237,66,69,.08);border:1px solid rgba(237,66,69,.2);color:var(--red)}
+.mtag{background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.2);border-radius:4px;padding:1px 6px;font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;color:var(--ac2);margin-left:4px}
+.empty-st{text-align:center;padding:48px;color:var(--muted);font-size:12px;line-height:2}
+
+/* MODALS */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:32px 20px;overflow-y:auto}
+.overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:680px;overflow:hidden;animation:fadeUp .2s ease both}
+.modal-lg{max-width:820px}
+.mhead{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--border);background:var(--sur2)}
+.mtitle{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;flex:1}
+.msub{font-size:11px;color:var(--muted);margin-top:2px}
+.mclose{background:transparent;border:1px solid var(--border2);color:var(--dim);border-radius:6px;padding:5px 10px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;transition:all .2s}
+.mclose:hover{border-color:var(--red);color:var(--red)}
+.mbody{padding:20px 22px;display:flex;flex-direction:column;gap:14px;max-height:65vh;overflow-y:auto}
+.mfoot{display:flex;align-items:center;gap:8px;padding:14px 22px;border-top:1px solid var(--border);background:var(--sur2)}
+.mfoot-left{margin-right:auto;font-size:10px;color:var(--muted)}
+
+/* VIEW MODAL FIELDS */
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ac2);border-bottom:1px solid var(--border);padding-bottom:6px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.df{display:flex;flex-direction:column;gap:4px}
+.df-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.df-val{font-size:11px;color:var(--text);background:var(--sur2);border:1px solid var(--border);border-radius:6px;padding:9px 11px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.df-val.hi{border-color:rgba(88,101,242,.3);background:rgba(88,101,242,.04)}
+.review-note{background:var(--sur3);border:1px solid var(--border2);border-radius:6px;padding:7px 10px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;outline:none;resize:none;width:200px;transition:border-color .2s}
+.review-note:focus{border-color:var(--accent)}
+.review-note::placeholder{color:#252840}
+
+/* ADD MODAL FORM */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrp{display:flex;flex-direction:column;gap:5px}
+.fgrp.full{grid-column:1/-1}
+.fgrp label{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.fgrp input,.fgrp select,.fgrp textarea{background:var(--sur2);border:1px solid var(--border2);border-radius:7px;padding:9px 11px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;outline:none;transition:border-color .2s;width:100%;resize:vertical}
+.fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{border-color:var(--accent)}
+.fgrp input::placeholder,.fgrp textarea::placeholder{color:#252840}
+.fgrp select option{background:var(--sur2)}
+.fgrp textarea{min-height:72px;line-height:1.6}
+.fdiv{grid-column:1/-1;display:flex;align-items:center;gap:10px;color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.fdiv::before,.fdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* QUESTION BUILDER */
+.q-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.q-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
+.q-card-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sur2);border-bottom:1px solid var(--border)}
+.q-num{width:26px;height:26px;border-radius:6px;background:rgba(88,101,242,.15);border:1px solid rgba(88,101,242,.25);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--ac2);flex-shrink:0}
+.q-lbl{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;flex:1;color:var(--text)}
+.q-card-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.q-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.q-field{display:flex;flex-direction:column;gap:4px}
+.q-field label{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.q-field input,.q-field textarea,.q-field select{background:var(--sur2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;outline:none;width:100%;resize:vertical;transition:border-color .2s}
+.q-field input:focus,.q-field textarea:focus,.q-field select:focus{border-color:var(--accent)}
+.q-field input::placeholder,.q-field textarea::placeholder{color:#252840}
+.q-field select option{background:var(--sur2)}
+.q-field textarea{min-height:64px;line-height:1.5}
+.add-q-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(88,101,242,.06);border:1px dashed rgba(88,101,242,.3);border-radius:10px;padding:14px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--ac2);cursor:pointer;transition:all .2s;width:100%}
+.add-q-btn:hover{background:rgba(88,101,242,.12);border-color:var(--accent)}
+.save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-24px;margin-top:0}
+.save-status{font-size:11px;color:var(--muted)}
+.save-status.saved{color:var(--green)}
+.save-status.unsaved{color:var(--yellow)}
+.locked-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(237,66,69,.05);border:1px solid rgba(237,66,69,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:#a07070;margin-bottom:16px;line-height:1.7}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--sur2);border:1px solid var(--border2);border-radius:10px;padding:11px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.tg{border-color:rgba(87,242,135,.3);color:var(--green)}
+.toast.tr{border-color:rgba(237,66,69,.3);color:var(--red)}
+.toast.ty{border-color:rgba(254,231,92,.3);color:var(--yellow)}
+
+@media(max-width:640px){.stat-grid{grid-template-columns:1fr 1fr}.fg2,.fg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-logo">
+    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#7289da" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.4C16.6 21.15 20 16.25 20 11V5l-8-3z"/><path fill="#fff" opacity=".9" d="M11 15.5l-3-3 1.4-1.4 1.6 1.6 3.6-3.6L16 10.5l-5 5z"/></svg>
+    Node
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-tag">Admin Portal</div>
+  <div class="tb-right">
+    <a href="/" target="_blank" class="tb-btn">↗ Application Form</a>
+    <div class="staff-pill">
+      <img class="staff-avatar" id="staffAvatar" src="" alt="" onerror="this.style.display='none'">
+      <div><div class="staff-name" id="staffName">Loading…</div><div class="staff-badge">Administrator</div></div>
+    </div>
+    <a href="/logout" class="tb-btn danger">Sign out</a>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-sec">Portal</div>
+    <div class="nav-item active" onclick="nav('applications',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Applications <span class="nc" id="pendingBadge">…</span>
+    </div>
+    <div class="nav-item" onclick="nav('questions',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Question Builder
+    </div>
+    <div class="sidebar-foot">Node Admin Portal v3<br>MongoDB · Discord OAuth<br>ADMIN_ROLE gated</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- APPLICATIONS -->
+    <div class="panel active" id="panel-applications">
+      <div class="page-head">
+        <div><h2>Applications</h2><p>All submitted staff applications — live from MongoDB</p></div>
+        <div class="head-acts">
+          <button class="btn btn-ghost" onclick="loadApps()">↺ Refresh</button>
+          <button class="btn btn-primary" onclick="openAddModal()">+ Add Application</button>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card sc-blue"><div class="stat-label">Total</div><div class="stat-val" id="sTotal">—</div><div class="stat-sub">all time</div></div>
+        <div class="stat-card sc-yellow"><div class="stat-label">Pending</div><div class="stat-val" id="sPending">—</div><div class="stat-sub">awaiting review</div></div>
+        <div class="stat-card sc-green"><div class="stat-label">Approved</div><div class="stat-val" id="sApproved">—</div><div class="stat-sub">accepted</div></div>
+        <div class="stat-card sc-red"><div class="stat-label">Denied</div><div class="stat-val" id="sDenied">—</div><div class="stat-sub">not moving forward</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-box" id="searchBox" placeholder="Search name, ID…" oninput="renderTable()">
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
+          <button class="filter-btn" onclick="setFilter('approved',this)">Approved</button>
+          <button class="filter-btn" onclick="setFilter('denied',this)">Denied</button>
+          <span class="count-lbl" id="cntLbl">Loading…</span>
+        </div>
+        <table>
+          <thead><tr><th>Applicant</th><th>App ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="appBody"><tr><td colspan="5" class="empty-st">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- QUESTION BUILDER -->
+    <div class="panel" id="panel-questions">
+      <div class="page-head">
+        <div><h2>Question Builder</h2><p>Add, edit, or remove questions — changes replace the live public form immediately</p></div>
+        <div class="head-acts">
+          <button class="btn btn-yellow" onclick="resetQuestions()">↺ Reset to Defaults</button>
+          <button class="btn btn-primary" onclick="saveQuestions()">✓ Save & Publish</button>
+        </div>
+      </div>
+
+      <div class="locked-notice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><rect fill="rgba(237,66,69,.2)" x="4" y="11" width="16" height="10" rx="2.5"/><path stroke="#ed4245" stroke-width="1.8" d="M8 11V7a4 4 0 018 0v4"/></svg>
+        <div><strong style="color:var(--text)">Sections 1, 2 & 4 are locked</strong> — Profile info, experience/tools, background check and consent are permanent and always shown. Only Section 3 (Custom Questions) is editable here.</div>
+      </div>
+
+      <div class="save-status unsaved" id="qSaveStatus" style="margin-bottom:14px">Loading questions…</div>
+
+      <div id="qList" class="q-list"></div>
+
+      <button class="add-q-btn" onclick="addQuestion()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Question
+      </button>
+
+      <div class="save-bar">
+        <div class="save-status" id="saveBarStatus">Unsaved changes will replace the live form on save.</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-yellow" onclick="resetQuestions()">↺ Reset</button>
+          <button class="btn btn-primary" onclick="saveQuestions()">✓ Save & Publish</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="overlay" id="viewOv" onclick="closeOv('viewOv',event)">
+  <div class="modal modal-lg">
+    <div class="mhead">
+      <div><div class="mtitle" id="vTitle">Application</div><div class="msub" id="vSub"></div></div>
+      <button class="mclose" onclick="closeOv('viewOv')">✕</button>
+    </div>
+    <div class="mbody" id="vBody"></div>
+    <div class="mfoot">
+      <div class="mfoot-left" id="vAppId"></div>
+      <textarea class="review-note" id="reviewNote" rows="1" placeholder="Review note…"></textarea>
+      <button class="btn btn-sm btn-red" onclick="setStatus('denied')">✕ Deny</button>
+      <button class="btn btn-sm btn-green" onclick="setStatus('approved')">✓ Approve</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="overlay" id="addOv" onclick="closeOv('addOv',event)">
+  <div class="modal modal-lg">
+    <div class="mhead">
+      <div><div class="mtitle">Add Application Manually</div><div class="msub">Saved to MongoDB and tagged as Manual Entry</div></div>
+      <button class="mclose" onclick="closeOv('addOv')">✕</button>
+    </div>
+    <div class="mbody" id="addBody">
+      <!-- Built dynamically from current questions -->
+    </div>
+    <div class="mfoot">
+      <div class="mfoot-left">Fields marked * are required</div>
+      <button class="btn btn-ghost" onclick="closeOv('addOv')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitAdd()">+ Add Application</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────
+let allApps       = [];
+let currentFilter = 'all';
+let currentMongoId= null;
+let qData         = [];      // current question set in builder
+
+// ── INIT ──────────────────────────────────────────────────────
+(async () => {
+  try {
+    const me = await fetch('/api/me').then(r => r.json());
+    document.getElementById('staffName').textContent = me.username || 'Admin';
+    document.getElementById('staffAvatar').src       = me.avatar   || '';
+  } catch {}
+  loadApps();
+  loadQuestions();
+})();
+
+// ── NAV ───────────────────────────────────────────────────────
+function nav(name, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── APPLICATIONS ──────────────────────────────────────────────
+async function loadApps() {
+  try {
+    allApps = await fetch('/api/applications').then(r => r.json());
+    updateStats();
+    renderTable();
+  } catch {
+    document.getElementById('appBody').innerHTML = `<tr><td colspan="5" class="empty-st">Failed to load — check server.</td></tr>`;
+  }
+}
+
+function updateStats() {
+  const t = allApps.length;
+  const a = allApps.filter(x => x._status === 'approved').length;
+  const d = allApps.filter(x => x._status === 'denied').length;
+  const p = allApps.filter(x => !x._status || x._status === 'pending').length;
+  document.getElementById('sTotal').textContent    = t;
+  document.getElementById('sPending').textContent  = p;
+  document.getElementById('sApproved').textContent = a;
+  document.getElementById('sDenied').textContent   = d;
+  document.getElementById('pendingBadge').textContent = p;
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  let list = allApps;
+  if (currentFilter !== 'all') list = list.filter(a => (a._status || 'pending') === currentFilter);
+  if (q) list = list.filter(a => (a._displayName||'').toLowerCase().includes(q) || (a._appId||'').toLowerCase().includes(q) || (a._submittedBy||'').toLowerCase().includes(q));
+
+  document.getElementById('cntLbl').textContent = `${list.length} application${list.length!==1?'s':''}`;
+
+  if (!list.length) {
+    document.getElementById('appBody').innerHTML = `<tr><td colspan="5" class="empty-st">No applications found.</td></tr>`;
+    return;
+  }
+
+  document.getElementById('appBody').innerHTML = list.map(app => {
+    const name   = app._displayName || 'Unknown';
+    const appId  = app._appId || '—';
+    const date   = app._submittedAt ? new Date(app._submittedAt).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '—';
+    const status = app._status || 'pending';
+    const sc     = status === 'approved' ? 'sp-a' : status === 'denied' ? 'sp-d' : 'sp-p';
+    const st     = status === 'approved' ? '✓ Approved' : status === 'denied' ? '✕ Denied' : '⏳ Pending';
+    const mid    = typeof app._id === 'object' ? app._id.$oid : app._id;
+    const mtag   = app._manual ? '<span class="mtag">Manual</span>' : '';
+
+    return `<tr>
+      <td><div class="ucell"><img class="uav" src="${app._avatar||''}" onerror="this.src=''"><div><div class="uname">${esc(name)}${mtag}</div><div class="uid">${esc(app._submittedBy||'—')}</div></div></div></td>
+      <td class="appid-cell">${esc(appId)}</td>
+      <td style="font-size:10px;color:var(--muted)">${date}</td>
+      <td><span class="sp ${sc}">${st}</span></td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick='openView("${mid}")'>👁 View</button>
+        <button class="btn btn-red btn-sm" onclick='delApp("${mid}")'>✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── VIEW MODAL ────────────────────────────────────────────────
+function openView(mid) {
+  const app = allApps.find(a => {
+    const id = typeof a._id === 'object' ? a._id.$oid : String(a._id);
+    return id === mid;
+  });
+  if (!app) return;
+  currentMongoId = mid;
+
+  document.getElementById('vTitle').textContent = `${app._displayName || 'Unknown'}'s Application`;
+  document.getElementById('vSub').textContent   = app._submittedAt ? new Date(app._submittedAt).toLocaleString('en-US', {dateStyle:'full',timeStyle:'short'}) : '—';
+  document.getElementById('vAppId').textContent = `ID: ${app._appId || '—'}  ·  Status: ${app._status || 'pending'}`;
+  document.getElementById('reviewNote').value   = app._reviewNote || '';
+
+  const body = document.getElementById('vBody');
+  body.innerHTML = '';
+
+  if (app.embeds?.length) {
+    app.embeds.forEach(embed => {
+      const sec = document.createElement('div');
+      sec.style.cssText = 'display:flex;flex-direction:column;gap:10px';
+      const t = document.createElement('div'); t.className = 'sec-title';
+      t.textContent = (embed.title || '').replace(/^[^\w\s]*\s*/u, '');
+      sec.appendChild(t);
+      const g = document.createElement('div'); g.className = 'fg2';
+      (embed.fields||[]).filter(f => f.name !== '\u200b').forEach(f => {
+        const w = document.createElement('div'); w.className = 'df';
+        const isLong = (f.value||'').length > 80 || !f.inline;
+        if (isLong) w.style.gridColumn = '1/-1';
+        w.innerHTML = `<div class="df-lbl">${esc(f.name.replace(/^[^\w\s]*\s*/u,''))}</div><div class="df-val${f.name.includes('User')||f.name.includes('Username')||f.name.includes('Consent')?' hi':''}">${esc(f.value||'Not provided')}</div>`;
+        g.appendChild(w);
+      });
+      sec.appendChild(g);
+      body.appendChild(sec);
+    });
+  } else {
+    // Manual entry
+    const g = document.createElement('div'); g.className = 'fg2';
+    const fields = [
+      ['Username', app._displayName], ['User ID', app._submittedBy],
+      ['Age', app.age], ['Timezone', app.timezone], ['Availability', app.availability],
+      ['Motivation', app.motivation], ['Server Invites', app.serverInvites],
+      ...Object.entries(app).filter(([k]) => k.startsWith('answer_')).map(([k,v]) => [k.replace('answer_','Q: '), v]),
+      ['Ever Banned?', app.banned], ['Has Alts?', app.alts],
+      ['Ban Explanation', app.banExplain], ['Extra Info', app.extra],
+    ].filter(([,v]) => v);
+    fields.forEach(([lbl, val]) => {
+      const w = document.createElement('div'); w.className = 'df';
+      if (String(val).length > 60) w.style.gridColumn = '1/-1';
+      w.innerHTML = `<div class="df-lbl">${esc(lbl)}</div><div class="df-val">${esc(String(val))}</div>`;
+      g.appendChild(w);
+    });
+    body.appendChild(g);
+  }
+
+  document.getElementById('viewOv').classList.add('show');
+}
+
+async function setStatus(status) {
+  if (!currentMongoId) return;
+  const note = document.getElementById('reviewNote').value.trim();
+  try {
+    await fetch(`/api/applications/${currentMongoId}/status`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, note }),
+    });
+    closeOv('viewOv');
+    toast(status === 'approved' ? '✓ Approved' : '✕ Denied', status === 'approved' ? 'tg' : 'tr');
+    await loadApps();
+  } catch { toast('Error updating status', 'tr'); }
+}
+
+async function delApp(mid) {
+  if (!confirm('Delete this application permanently?')) return;
+  try {
+    await fetch(`/api/applications/${mid}`, { method: 'DELETE' });
+    toast('Application deleted', 'tr');
+    await loadApps();
+  } catch { toast('Error deleting', 'tr'); }
+}
+
+// ── ADD MODAL ─────────────────────────────────────────────────
+function openAddModal() {
+  // Build form from current questions
+  const body = document.getElementById('addBody');
+  body.innerHTML = '';
+
+  // Profile (fixed)
+  const profileHtml = `
+    <div class="fg">
+      <div class="fdiv">Profile</div>
+      <div class="fgrp"><label>Discord Username *</label><input id="a_username" placeholder="username"></div>
+      <div class="fgrp"><label>Discord User ID</label><input id="a_userid" placeholder="000000000000000000"></div>
+      <div class="fgrp"><label>Age *</label><input id="a_age" type="number" placeholder="16" min="14"></div>
+      <div class="fgrp"><label>Timezone *</label>
+        <select id="a_tz"><option value="">— Select —</option>
+          <option>UTC-8 (PST)</option><option>UTC-7 (MST)</option><option>UTC-6 (CST)</option>
+          <option>UTC-5 (EST)</option><option>UTC+0 (GMT)</option><option>UTC+1 (CET)</option>
+          <option>UTC+2 (EET)</option><option>UTC+3 (MSK)</option><option>UTC+5:30 (IST)</option>
+          <option>UTC+8 (SGT)</option><option>UTC+9 (JST)</option><option>UTC+10 (AEST)</option>
+        </select>
+      </div>
+      <div class="fgrp"><label>Availability *</label>
+        <select id="a_avail"><option value="">— Select —</option>
+          <option>Less than 1 hour/day</option><option>1–3 hours/day</option>
+          <option>3–6 hours/day</option><option>6+ hours/day</option>
+        </select>
+      </div>
+      <div class="fdiv">Experience</div>
+      <div class="fgrp"><label>Prior Mod Experience?</label>
+        <select id="a_modexp"><option value="no">No</option><option value="yes">Yes</option></select>
+      </div>
+    </div>`;
+
+  const div0 = document.createElement('div');
+  div0.innerHTML = profileHtml;
+  body.appendChild(div0);
+
+  // Dynamic questions
+  if (qData.length) {
+    const divQ = document.createElement('div');
+    divQ.style.cssText = 'display:flex;flex-direction:column;gap:10px';
+    const header = document.createElement('div');
+    header.style.cssText = 'font-family:Rajdhani,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px';
+    header.innerHTML = `<span>Custom Questions</span><span style="flex:1;height:1px;background:var(--border);display:block"></span>`;
+    divQ.appendChild(header);
+    qData.forEach(q => {
+      const f = document.createElement('div');
+      f.className = 'fgrp full';
+      f.style.cssText = 'display:flex;flex-direction:column;gap:5px';
+      const reqStar = q.required ? ' *' : '';
+      if (q.type === 'scenario') {
+        f.innerHTML = `<label>${esc(q.label)}${reqStar}</label><div style="font-size:10px;color:var(--dim);margin-bottom:2px;font-style:italic">${esc(q.body||'')}</div><textarea id="a_q_${q.id}" placeholder="Their response…"></textarea>`;
+      } else {
+        f.innerHTML = `<label>${esc(q.label)}${reqStar}</label><textarea id="a_q_${q.id}" placeholder="${esc(q.placeholder||'')}"></textarea>`;
+      }
+      divQ.appendChild(f);
+    });
+    body.appendChild(divQ);
+  }
+
+  // Background (fixed)
+  const bgDiv = document.createElement('div');
+  bgDiv.innerHTML = `
+    <div class="fg" style="margin-top:10px">
+      <div class="fdiv">Background</div>
+      <div class="fgrp"><label>Ever Been Banned?</label><select id="a_banned"><option value="no">No</option><option value="yes">Yes</option></select></div>
+      <div class="fgrp"><label>Has Alt Accounts?</label><select id="a_alts"><option value="no">No</option><option value="yes">Yes</option></select></div>
+      <div class="fgrp full"><label>Ban Explanation</label><textarea id="a_banex" placeholder="N/A or explanation…"></textarea></div>
+      <div class="fgrp full"><label>Extra Info</label><textarea id="a_extra" placeholder="Anything else…"></textarea></div>
+      <div class="fdiv">Review</div>
+      <div class="fgrp"><label>Initial Status</label><select id="a_status"><option value="pending">Pending</option><option value="approved">Approved</option><option value="denied">Denied</option></select></div>
+      <div class="fgrp"><label>Review Note</label><input id="a_note" placeholder="Optional…"></div>
+    </div>`;
+  body.appendChild(bgDiv);
+
+  document.getElementById('addOv').classList.add('show');
+}
+
+async function submitAdd() {
+  const g = id => document.getElementById(id)?.value.trim() || '';
+  const username = g('a_username');
+  const age      = g('a_age');
+  const tz       = g('a_tz');
+  const avail    = g('a_avail');
+
+  if (!username || !age || !tz || !avail) { toast('Fill required fields', 'ty'); return; }
+
+  const answers = {};
+  qData.forEach(q => {
+    const val = g(`a_q_${q.id}`);
+    if (val) answers[`answer_${q.id}`] = val;
+  });
+
+  // Also build a webhook-style embed for consistency
+  const qFields = qData.map(q => ({
+    name:  q.label.substring(0, 256),
+    value: (g(`a_q_${q.id}`) || 'Not provided').substring(0, 1024),
+  }));
+
+  const appId = 'NODE-' + Math.random().toString(36).slice(2,11).toUpperCase();
+  const webhookPayload = {
+    username: 'Node — Staff Applications',
+    avatar_url: 'https://cdn.discordapp.com/icons/1188543366372261888/57fc16a1f4ba7d6cab770b59431a16cd.png?size=128',
+    content: `📋 **MANUAL APPLICATION — NODE**\n> ID: \`${appId}\`  •  Added by admin`,
+    embeds: [
+      { title: '👤 PROFILE', color: 0xffffff, fields: [
+        { name: 'Username',     value: username, inline: true },
+        { name: 'Age',          value: age,      inline: true },
+        { name: 'Timezone',     value: tz,       inline: true },
+        { name: 'Availability', value: avail,    inline: true },
+      ]},
+      ...(qFields.length ? [{ title: '⚡ CUSTOM QUESTIONS', color: 0x888888, fields: qFields }] : []),
+      { title: '🔍 BACKGROUND', color: 0x333333, fields: [
+        { name: 'Banned?', value: g('a_banned') === 'yes' ? '✅ YES' : '❌ NO', inline: true },
+        { name: 'Alts?',   value: g('a_alts')   === 'yes' ? '✅ YES' : '❌ NO', inline: true },
+        { name: 'Ban Explanation', value: g('a_banex') || 'N/A' },
+      ], footer: { text: `Application ID: ${appId}  •  Manual Entry` }, timestamp: new Date().toISOString() },
+    ],
+  };
+
+  const payload = {
+    _displayName: username,
+    _submittedBy: g('a_userid') || 'manual',
+    age, timezone: tz, availability: avail,
+    modExp: g('a_modexp'),
+    ...answers,
+    banned: g('a_banned'), alts: g('a_alts'),
+    banExplain: g('a_banex'), extra: g('a_extra'),
+    _status:     g('a_status') || 'pending',
+    _reviewNote: g('a_note'),
+    embeds:      webhookPayload.embeds,
+    content:     webhookPayload.content,
+    _appId:      appId,
+  };
+
+  try {
+    const res  = await fetch('/api/applications', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!data.ok) throw new Error();
+    closeOv('addOv');
+    toast(`✓ Added — ${data.appId}`, 'tg');
+    await loadApps();
+  } catch { toast('Error adding application', 'tr'); }
+}
+
+// ── QUESTION BUILDER ──────────────────────────────────────────
+async function loadQuestions() {
+  try {
+    qData = await fetch('/api/questions').then(r => r.json());
+    renderQBuilder();
+    document.getElementById('qSaveStatus').textContent   = `${qData.length} questions loaded`;
+    document.getElementById('qSaveStatus').className     = 'save-status saved';
+    document.getElementById('saveBarStatus').textContent = 'Questions loaded from database.';
+  } catch {
+    document.getElementById('qSaveStatus').textContent = 'Failed to load questions';
+  }
+}
+
+function renderQBuilder() {
+  const list = document.getElementById('qList');
+  if (!qData.length) {
+    list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:12px">No questions yet — click "Add Question" to start building.</div>`;
+    return;
+  }
+  list.innerHTML = qData.map((q, i) => `
+    <div class="q-card" id="qc_${i}">
+      <div class="q-card-head">
+        <div class="q-num">${i + 1}</div>
+        <div class="q-lbl">${esc(q.label || 'Untitled Question')}</div>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          ${i > 0 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},-1)">↑</button>` : ''}
+          ${i < qData.length-1 ? `<button class="btn btn-ghost btn-sm" onclick="moveQ(${i},1)">↓</button>` : ''}
+          <button class="btn btn-red btn-sm" onclick="removeQ(${i})">✕</button>
+        </div>
+      </div>
+      <div class="q-card-body">
+        <div class="q-row">
+          <div class="q-field">
+            <label>Question Label *</label>
+            <input type="text" value="${esc(q.label||'')}" onchange="qData[${i}].label=this.value;markUnsaved()" placeholder="e.g. Scenario A — …">
+          </div>
+          <div class="q-field">
+            <label>Type</label>
+            <select onchange="qData[${i}].type=this.value;markUnsaved();renderQBuilder()">
+              <option value="textarea" ${q.type==='textarea'?'selected':''}>Text Area</option>
+              <option value="scenario" ${q.type==='scenario'?'selected':''}>Scenario (with description)</option>
+            </select>
+          </div>
+        </div>
+        ${q.type === 'scenario' ? `
+        <div class="q-field">
+          <label>Scenario Description (shown to applicant)</label>
+          <textarea onchange="qData[${i}].body=this.value;markUnsaved()" placeholder="Describe the scenario…">${esc(q.body||'')}</textarea>
+        </div>` : `
+        <div class="q-field">
+          <label>Placeholder Text</label>
+          <input type="text" value="${esc(q.placeholder||'')}" onchange="qData[${i}].placeholder=this.value;markUnsaved()" placeholder="Hint shown in the text box…">
+        </div>`}
+        <div class="q-row">
+          <div class="q-field">
+            <label>Max Characters</label>
+            <input type="number" value="${q.maxLen||500}" min="100" max="1000" onchange="qData[${i}].maxLen=parseInt(this.value);markUnsaved()">
+          </div>
+          <div class="q-field">
+            <label>Required?</label>
+            <select onchange="qData[${i}].required=this.value==='true';markUnsaved()">
+              <option value="true"  ${q.required!==false?'selected':''}>Yes — required</option>
+              <option value="false" ${q.required===false?'selected':''}>No — optional</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addQuestion() {
+  qData.push({ id: 'q_' + Date.now(), label: '', type: 'textarea', required: true, maxLen: 500, placeholder: '', body: '' });
+  renderQBuilder();
+  markUnsaved();
+  // Scroll to bottom
+  const list = document.getElementById('qList');
+  list.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function removeQ(i) {
+  if (!confirm('Remove this question?')) return;
+  qData.splice(i, 1);
+  renderQBuilder();
+  markUnsaved();
+}
+
+function moveQ(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= qData.length) return;
+  [qData[i], qData[j]] = [qData[j], qData[i]];
+  renderQBuilder();
+  markUnsaved();
+}
+
+function markUnsaved() {
+  document.getElementById('qSaveStatus').textContent = '● Unsaved changes';
+  document.getElementById('qSaveStatus').className   = 'save-status unsaved';
+  document.getElementById('saveBarStatus').textContent = '● Unsaved — click Save & Publish to apply changes to the live form.';
+}
+
+async function saveQuestions() {
+  // Validate
+  for (const q of qData) {
+    if (!q.label?.trim()) { toast('All questions need a label', 'ty'); return; }
+    if (!q.id) q.id = 'q_' + Date.now();
+  }
+  try {
+    await fetch('/api/questions', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(qData) });
+    document.getElementById('qSaveStatus').textContent = '✓ Saved & published to live form';
+    document.getElementById('qSaveStatus').className   = 'save-status saved';
+    document.getElementById('saveBarStatus').textContent = 'Questions saved. The public form will now use these questions.';
+    toast('✓ Questions published to live form', 'tg');
+  } catch { toast('Error saving questions', 'tr'); }
+}
+
+async function resetQuestions() {
+  if (!confirm('Reset all questions to the defaults? This will overwrite your current questions.')) return;
+  try {
+    const res = await fetch('/api/questions/reset', { method: 'POST' });
+    const data = await res.json();
+    qData = data.questions;
+    renderQBuilder();
+    document.getElementById('qSaveStatus').textContent = '✓ Reset to defaults';
+    document.getElementById('qSaveStatus').className   = 'save-status saved';
+    toast('Questions reset to defaults', 'ty');
+  } catch { toast('Error resetting', 'tr'); }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function closeOv(id, e) {
+  if (e && e.target !== document.getElementById(id)) return;
+  document.getElementById(id).classList.remove('show');
+  if (id === 'viewOv') currentMongoId = null;
+}
+
+function toast(msg, cls = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${cls} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
