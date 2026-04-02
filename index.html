@@ -465,7 +465,7 @@ function backToTypeSelect() {
 const STEPS = [
   { title:'Your Profile',           sub:'Basic identity & Discord info',        icon:'#ic-person' },
   { title:'Moderation Experience',  sub:"Tell us what you've done before",       icon:'#ic-star'   },
-  { title:'Custom Questions',       sub:'Answer all required questions',         icon:'#ic-bolt'   },
+  { title:'Scenario Questions',     sub:'Answer all required questions',         icon:'#ic-bolt'   },
   { title:'Background & Consent',   sub:'Review & background check disclosure',  icon:'#ic-search' },
 ];
 
@@ -771,7 +771,7 @@ async function submitApp() {
         { name:'Prior Mod Experience', value: radio('modExp')==='yes'?'✅ YES':'❌ NO', inline:true },
         { name:'Tools Used',           value: cut(checks('tools')), inline:true },
       ]},
-      { title: '⚡  SECTION 3 — CUSTOM QUESTIONS', color: 0x888888, fields: customFields.length ? customFields : [{ name:'No questions', value:'No custom questions configured.' }] },
+     { title: '⚡  SECTION 3 — SCENARIO QUESTIONS', color: 0x888888, fields: customFields.length ? customFields : [{ name:'No questions', value:'No scenario questions configured.' }] },
       { title: '🔍  SECTION 4 — BACKGROUND & CONSENT', color: 0x333333, fields: [
         { name:'Ever Banned?', value: radio('banned')==='yes'?'✅ YES':'❌ NO', inline:true },
         { name:'Has Alts?',    value: radio('alts')==='yes'?'✅ YES':'❌ NO', inline:true },
